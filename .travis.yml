@@ -1,0 +1,11 @@
+language: php
+php: 5.6
+before_script:
+    - composer install
+    - mysql -e 'CREATE DATABASE `reen`;'
+
+env:
+    - DB=mysql
+
+script:
+    - sh run_tests.sh
