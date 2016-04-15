@@ -40,14 +40,14 @@ class SAdvertisement
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $phones;
+    private $phoneLink;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->phones = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->phoneLink = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -181,37 +181,37 @@ class SAdvertisement
     }
 
     /**
-     * Add phone
+     * Add phoneLink
      *
-     * @param \AppBundle\Entity\SAdvertisementToPhone $phone
+     * @param \AppBundle\Entity\SAdvertisementToPhone $phoneLink
      *
      * @return SAdvertisement
      */
-    public function addPhone(\AppBundle\Entity\SAdvertisementToPhone $phone)
+    public function addPhoneLink(\AppBundle\Entity\SAdvertisementToPhone $phoneLink)
     {
-        $this->phones[] = $phone;
+        $this->phoneLink[] = $phoneLink;
 
         return $this;
     }
 
     /**
-     * Remove phone
+     * Remove phoneLink
      *
-     * @param \AppBundle\Entity\SAdvertisementToPhone $phone
+     * @param \AppBundle\Entity\SAdvertisementToPhone $phoneLink
      */
-    public function removePhone(\AppBundle\Entity\SAdvertisementToPhone $phone)
+    public function removePhoneLink(\AppBundle\Entity\SAdvertisementToPhone $phoneLink)
     {
-        $this->phones->removeElement($phone);
+        $this->phoneLink->removeElement($phoneLink);
     }
 
     /**
-     * Get phones
+     * Get phoneLink
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getPhones()
+    public function getPhoneLink()
     {
-        return $this->phones;
+        return $this->phoneLink;
     }
 }
 

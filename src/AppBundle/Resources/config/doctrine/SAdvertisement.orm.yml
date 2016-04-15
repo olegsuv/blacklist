@@ -4,7 +4,7 @@ AppBundle\Entity\SAdvertisement:
     repositoryClass: AppBundle\Repository\SAdvertisementRepository
 
     oneToMany:
-        phones:
+        phoneLink:
             targetEntity: AppBundle\Entity\SAdvertisementToPhone
             mappedBy: advertisement
             fetch: EXTRA_LAZY

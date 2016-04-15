@@ -39,7 +39,7 @@ class EstateAgentService
                 ->setAdvertisement($advertisement)
                 ->setPhone($phoneComplete);
 
-            $advertisement->addPhone($advertisementToPhone);
+            $advertisement->addPhoneLink($advertisementToPhone);
             $this->doctrine->getManager()->persist($advertisementToPhone);;
         }
 

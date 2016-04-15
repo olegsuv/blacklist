@@ -14,7 +14,7 @@ AppBundle\Entity\SAdvertisementToPhone:
     manyToOne:
         advertisement:
             targetEntity: AppBundle\Entity\SAdvertisement
-            inversedBy: phones
+            inversedBy: phoneLink
             fetch: EXTRA_LAZY
             joinColumn:
                 name: advertisement_id
