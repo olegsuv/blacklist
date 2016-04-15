@@ -23,7 +23,7 @@ class ApiEstateAgentControllerTest extends WebTestCase
 
         $client->request('POST', '/api/v1/estate/advertisement/add.json', [
             'comment' => 'Missing',
-            'phones' => ['380630000000'],
+            'phones' => ['380630000000', '380631234567'],
             'url' => 'http://somesite.ua/room/18',
         ]);
 
@@ -40,13 +40,30 @@ class ApiEstateAgentControllerTest extends WebTestCase
             'items' => [
                 [
                     'comment' => 'Missing',
-                    'phones' => ['380630000000'],
+                    'phones' => ['380630000000', '380631234567'],
                     'url' => 'http://somesite.ua/room/18',
                 ],
                 [
                     'comment' => 'Ignore after call',
                     'phones' => ['380630000000'],
                     'url' => 'http://somesite.ua/room/17',
+                ],
+            ]
+        ];
+
+        $client->request('GET', '/api/v1/estate/advertisement/find/phone.json', [
+            'phone' => '380631234567'
+        ]);
+
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+
+        $expect = [
+            'success' => true,
+            'items' => [
+                [
+                    'comment' => 'Missing',
+                    'phones' => ['380630000000', '380631234567'],
+                    'url' => 'http://somesite.ua/room/18',
                 ],
             ]
         ];
@@ -78,7 +95,7 @@ class ApiEstateAgentControllerTest extends WebTestCase
 
         $expect = [
             'success' => true,
-            'items' => ['380630000000']
+            'items' => ['380630000000', '380631234567']
         ];
 
         $this->assertEquals($expect, json_decode($client->getResponse()->getContent(), true));
