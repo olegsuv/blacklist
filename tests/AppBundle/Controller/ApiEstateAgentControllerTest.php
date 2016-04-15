@@ -10,6 +10,10 @@ class ApiEstateAgentControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
+        $container = static::$kernel->getContainer();
+
+        $container->get('rqs.database.tester')->clear();
+
         $client->request('POST', '/api/v1/estate.json', [
             'phone' => '380630000000'
         ]);
