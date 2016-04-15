@@ -7,3 +7,8 @@ composer create-project symfony/framework-standard-edition backend
 ```bash
 composer require doctrine/doctrine-migrations-bundle
 ```
+
+* [NelmioApiDocBundle] (http://symfony.com/doc/current/bundles/NelmioApiDocBundle/index.html)
+```
+composer require nelmio/api-doc-bundle
+```

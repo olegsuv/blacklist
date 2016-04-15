@@ -6,9 +6,21 @@ use AppBundle\Entity\SEstateAgentPhone;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 class ApiEstateAgentController extends Controller
 {
+    /**
+     * @ApiDoc(
+     *    section="estate-agent",
+     *    description="Create",
+     *    requirements={
+     *        {"name"="phone", "dataType"="string", "required"=true}
+     *    }
+     * )
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function createAction(Request $request)
     {
         $phone = $request->request->get('phone');
@@ -25,6 +37,17 @@ class ApiEstateAgentController extends Controller
         return new JsonResponse([], JsonResponse::HTTP_CREATED);
     }
 
+    /**
+     * @ApiDoc(
+     *    section="estate-agent",
+     *    description="Find",
+     *    parameters={
+     *        {"name"="phone", "dataType"="string", "required"=false}
+     *    }
+     * )
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function findAction(Request $request)
     {
         $phone = $request->query->get('phone');
