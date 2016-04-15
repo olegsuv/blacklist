@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
-class ApiEstateAgentController extends Controller
+class ApiEstateAgentController extends ApiAbstractController
 {
     /**
      * @ApiDoc(
@@ -34,7 +34,7 @@ class ApiEstateAgentController extends Controller
         $this->get('doctrine')->getManager()->persist($agentPhone);
         $this->get('doctrine')->getManager()->flush();
 
-        return new JsonResponse([], JsonResponse::HTTP_CREATED);
+        return $this->successResponse();
     }
 
     /**
@@ -58,16 +58,15 @@ class ApiEstateAgentController extends Controller
             ->findOneBy(['phone' => $phone]);
 
         if ($agentPhone) {
-            return new JsonResponse([
-                'exists' => true,
+            return $this->successResponse([
                 'data' => [
                     'phone' => $agentPhone->getPhone()
                 ],
             ]);
+
         }
 
-        return new JsonResponse([
-            'exists' => false,
+        return $this->successResponse([
             'data' => null,
         ]);
     }

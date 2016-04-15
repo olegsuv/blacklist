@@ -18,7 +18,7 @@ class ApiEstateAgentControllerTest extends WebTestCase
             'phone' => '380630000000'
         ]);
 
-        $this->assertEquals(201, $client->getResponse()->getStatusCode());
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
 
     public function testFind()
@@ -32,12 +32,12 @@ class ApiEstateAgentControllerTest extends WebTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
 
         $expect = [
-            'exists' => true,
+            'success' => true,
             'data' => [
                 'phone' => '380630000000'
             ]
         ];
 
-        $this->assertSame($expect, json_decode($client->getResponse()->getContent(), true));
+        $this->assertEquals($expect, json_decode($client->getResponse()->getContent(), true));
     }
 }

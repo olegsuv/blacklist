@@ -3,3 +3,8 @@ services:
         class: AppBundle\Service\DatabaseTesterService
         arguments:
             - '@doctrine'
+
+    est.agent:
+        class: AppBundle\Service\EstateAgentService
+        arguments:
+            - '@doctrine'
