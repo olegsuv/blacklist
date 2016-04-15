@@ -1,0 +1,4 @@
+estate_agent_create:
+    path:  estate.{_format}
+    defaults: { _controller: AppBundle:ApiEstateAgent:create }
+    methods: [ 'POST' ]
