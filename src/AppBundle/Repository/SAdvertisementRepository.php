@@ -13,7 +13,7 @@ class SAdvertisementRepository extends \Doctrine\ORM\EntityRepository
     public function findByPhone($phone)
     {
         return $this->createQueryBuilder('a')
-            ->select('a.comment, a.url')
+            ->select('a.id, a.comment, a.url')
             ->innerJoin('a.phoneLink', 'phoneLink')
             ->innerJoin('phoneLink.phone', 'phone')
             ->where('phone.phone = :phone')
@@ -27,7 +27,7 @@ class SAdvertisementRepository extends \Doctrine\ORM\EntityRepository
     public function findByUrl($url)
     {
         return $this->createQueryBuilder('a')
-            ->select('a.comment, a.url')
+            ->select('a.id, a.comment, a.url')
             ->where('a.url = :url')
             ->setParameter('url', $url)
             ->setMaxResults(10)

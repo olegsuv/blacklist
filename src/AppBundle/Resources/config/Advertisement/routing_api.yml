@@ -1,14 +1,19 @@
-estate_agent_add:
+estate_advertisement_add:
     path:  add.{_format}
-    defaults: { _controller: AppBundle:ApiEstateAgent:create }
+    defaults: { _controller: AppBundle:ApiEstateAdvertisement:create }
     methods: [ 'POST' ]
 
-estate_agent_fing_by_phone:
+estate_advertisement_fing_by_phone:
     path:  find/phone.{_format}
-    defaults: { _controller: AppBundle:ApiEstateAgent:findPhone }
+    defaults: { _controller: AppBundle:ApiEstateAdvertisement:findPhone }
     methods: [ 'GET' ]
 
-estate_agent_fing_by_url:
+estate_advertisement_fing_by_url:
     path:  find/url.{_format}
-    defaults: { _controller: AppBundle:ApiEstateAgent:findUrl }
+    defaults: { _controller: AppBundle:ApiEstateAdvertisement:findUrl }
+    methods: [ 'GET' ]
+
+estate_advertisement_all_phones:
+    path:  phones.{_format}
+    defaults: { _controller: AppBundle:ApiEstateAdvertisement:allPhone }
     methods: [ 'GET' ]

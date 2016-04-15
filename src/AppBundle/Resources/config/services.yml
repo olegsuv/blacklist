@@ -9,7 +9,7 @@ services:
         arguments:
             - '@doctrine'
 
-    est.agent:
+    est.advertisement:
         class: AppBundle\Service\EstateAgentService
         arguments:
             - '@doctrine'

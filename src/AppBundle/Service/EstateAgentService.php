@@ -52,11 +52,45 @@ class EstateAgentService
 
     public function findByPhone($phone)
     {
-        return $this->doctrine->getRepository('AppBundle:SAdvertisement')->findByPhone($phone);
+        $source = $this->doctrine->getRepository('AppBundle:SAdvertisement')->findByPhone($phone);
+
+        return $this->prepareFullData($source);
     }
 
     public function findByUrl($url)
     {
-        return $this->doctrine->getRepository('AppBundle:SAdvertisement')->findByUrl($url);
+        $source = $this->doctrine->getRepository('AppBundle:SAdvertisement')->findByUrl($url);
+
+        return $this->prepareFullData($source);
+    }
+
+    public function prepareFullData(array $source)
+    {
+        if (empty($source)) {
+            return [];
+        }
+
+        $map = [];
+
+        foreach ($source as $entry) {
+            $map[$entry['id']] = [
+                'comment' => $entry['comment'],
+                'url' => $entry['url'],
+                'phones' => [],
+            ];
+        }
+
+        $idList = array_keys($map);
+
+        $advertisementIdPhoneList = $this
+            ->doctrine
+            ->getRepository('AppBundle:SAdvertisementToPhone')
+            ->getAdvertisementIdPhoneList($idList);
+
+        foreach ($advertisementIdPhoneList as $advertisementIdPhone) {
+            $map[$advertisementIdPhone['advertisementId']]['phones'][] = $advertisementIdPhone['phone'];
+        }
+
+        return array_values($map);
     }
 }

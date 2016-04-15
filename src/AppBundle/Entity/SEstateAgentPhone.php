@@ -81,4 +81,3 @@ class SEstateAgentPhone
         return $this->inserted;
     }
 }
-

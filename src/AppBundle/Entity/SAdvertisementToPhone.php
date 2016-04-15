@@ -139,4 +139,3 @@ class SAdvertisementToPhone
         return $this->phone;
     }
 }
-

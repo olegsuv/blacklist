@@ -214,4 +214,3 @@ class SAdvertisement
         return $this->phoneLink;
     }
 }
-
