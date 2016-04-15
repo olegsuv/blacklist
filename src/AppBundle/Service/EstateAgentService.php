@@ -52,6 +52,6 @@ class EstateAgentService
 
     public function findByPhone($phone)
     {
-        return [];
+        return $this->doctrine->getRepository('AppBundle:SAdvertisement')->findByPhone($phone);
     }
 }

@@ -22,4 +22,27 @@ class ApiEstateAgentControllerTest extends WebTestCase
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
+
+    public function testFindPhone()
+    {
+        $client = static::createClient();
+
+        $client->request('GET', '/api/v1/estate/find/phone.json', [
+            'phone' => '380630000000'
+        ]);
+
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+
+        $expect = [
+            'success' => true,
+            'items' => [
+                [
+                    'comment' => 'Ignore after call',
+                    'url' => 'http://somesite.ua/room/17',
+                ]
+            ]
+        ];
+
+        $this->assertEquals($expect, json_decode($client->getResponse()->getContent(), true));
+    }
 }

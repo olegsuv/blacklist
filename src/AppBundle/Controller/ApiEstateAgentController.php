@@ -47,6 +47,8 @@ class ApiEstateAgentController extends ApiAbstractController
     {
         $phone = $request->query->get('phone');
 
-        return $this->successResponse($this->get('est.agent')->findByPhone($phone));
+        return $this->successResponse([
+            'items' => $this->get('est.agent')->findByPhone($phone)
+        ]);
     }
 }
