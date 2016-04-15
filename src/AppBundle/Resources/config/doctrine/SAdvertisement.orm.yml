@@ -1,0 +1,48 @@
+AppBundle\Entity\SAdvertisement:
+    type: entity
+    table: s_advertisement
+    repositoryClass: AppBundle\Repository\SAdvertisementRepository
+
+    oneToMany:
+        phoneLink:
+            targetEntity: AppBundle\Entity\SAdvertisementToPhone
+            mappedBy: advertisement
+            fetch: EXTRA_LAZY
+
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+
+    fields:
+        title:
+            type: string
+            nullable: false
+            length: 255
+            fixed: false
+        comment:
+            type: string
+            nullable: false
+            length: 255
+            fixed: false
+        title:
+            type: string
+            nullable: true
+            length: 255
+            fixed: false
+        description:
+            type: string
+            nullable: true
+            fixed: false
+        url:
+            type: string
+            nullable: true
+            length: 255
+            fixed: false
+        inserted:
+            type: datetime
+            nullable: false

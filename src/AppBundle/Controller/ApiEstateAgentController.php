@@ -2,13 +2,11 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\SEstateAgentPhone;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
-class ApiEstateAgentController extends Controller
+class ApiEstateAgentController extends ApiAbstractController
 {
     /**
      * @ApiDoc(
@@ -23,52 +21,54 @@ class ApiEstateAgentController extends Controller
      */
     public function createAction(Request $request)
     {
-        $phone = $request->request->get('phone');
+        $phones = $request->request->get('phones');
+        $url = $request->request->get('url');
+        $comment = $request->request->get('comment');
+        $title = $request->request->get('title');
+        $description = $request->request->get('description');
 
-        $agentPhone = new SEstateAgentPhone();
+        $this->get('est.agent')->create($comment, $phones, $url, $title, $description);
 
-        $agentPhone
-            ->setPhone($phone)
-            ->setInserted(new \DateTime());
-
-        $this->get('doctrine')->getManager()->persist($agentPhone);
-        $this->get('doctrine')->getManager()->flush();
-
-        return new JsonResponse([], JsonResponse::HTTP_CREATED);
+        return $this->successResponse();
     }
 
     /**
      * @ApiDoc(
      *    section="estate-agent",
-     *    description="Find",
-     *    parameters={
-     *        {"name"="phone", "dataType"="string", "required"=false}
+     *    description="Find by phone",
+     *    requirements={
+     *        {"name"="phone", "dataType"="string", "required"=true}
      *    }
      * )
      * @param Request $request
      * @return JsonResponse
      */
-    public function findAction(Request $request)
+    public function findPhoneAction(Request $request)
     {
         $phone = $request->query->get('phone');
 
-        $agentPhone = $this
-            ->get('doctrine')
-            ->getRepository('AppBundle:SEstateAgentPhone')
-            ->findOneBy(['phone' => $phone]);
+        return $this->successResponse([
+            'items' => $this->get('est.agent')->findByPhone($phone)
+        ]);
+    }
 
-        if ($agentPhone) {
-            return new JsonResponse([
-                'exists' => true,
-                'data' => [
-                    'phone' => $agentPhone->getPhone()
-                ],
-            ]);
-        }
+    /**
+     * @ApiDoc(
+     *    section="estate-agent",
+     *    description="Find by url",
+     *    parameters={
+     *        {"name"="url", "dataType"="string", "required"=true}
+     *    }
+     * )
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function findUrlAction(Request $request)
+    {
+        $url = $request->query->get('url');
 
-        return new JsonResponse([
-            'exists' => false,
-            'data' => null,
+        return $this->successResponse([
+            'items' => $this->get('est.agent')->findByUrl($url)
         ]);
     }
 }
