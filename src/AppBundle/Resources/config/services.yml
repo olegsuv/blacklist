@@ -1,0 +1,5 @@
+services:
+    rqs.database.tester:
+        class: AppBundle\Service\DatabaseTesterService
+        arguments:
+            - '@doctrine'
