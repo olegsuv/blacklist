@@ -19,7 +19,7 @@ class SAdvertisementRepository extends \Doctrine\ORM\EntityRepository
             ->where('phone.phone = :phone')
             ->setParameter('phone', $phone)
             ->setMaxResults(10)
-            ->orderBy('a.inserted', 'DESC')
+            ->orderBy('a.id', 'DESC')
             ->getQuery()
             ->getArrayResult();
     }
