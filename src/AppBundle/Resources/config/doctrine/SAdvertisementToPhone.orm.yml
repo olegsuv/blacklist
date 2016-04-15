@@ -1,6 +1,7 @@
 AppBundle\Entity\SAdvertisementToPhone:
     type: entity
     table: s_advertisement_to_phone
+    repositoryClass: AppBundle\Repository\SAdvertisementToPhoneRepository
 
     id:
         id:
