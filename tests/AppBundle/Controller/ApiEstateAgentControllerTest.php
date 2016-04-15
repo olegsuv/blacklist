@@ -40,10 +40,12 @@ class ApiEstateAgentControllerTest extends WebTestCase
             'items' => [
                 [
                     'comment' => 'Missing',
+                    'phones' => ['380630000000'],
                     'url' => 'http://somesite.ua/room/18',
                 ],
                 [
                     'comment' => 'Ignore after call',
+                    'phones' => ['380630000000'],
                     'url' => 'http://somesite.ua/room/17',
                 ],
             ]
@@ -62,6 +64,7 @@ class ApiEstateAgentControllerTest extends WebTestCase
             'items' => [
                 [
                     'comment' => 'Ignore after call',
+                    'phones' => ['380630000000'],
                     'url' => 'http://somesite.ua/room/17',
                 ],
             ]
