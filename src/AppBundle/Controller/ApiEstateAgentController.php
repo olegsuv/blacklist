@@ -35,9 +35,9 @@ class ApiEstateAgentController extends ApiAbstractController
     /**
      * @ApiDoc(
      *    section="estate-agent",
-     *    description="Find",
-     *    parameters={
-     *        {"name"="phone", "dataType"="string", "required"=false}
+     *    description="Find by phone",
+     *    requirements={
+     *        {"name"="phone", "dataType"="string", "required"=true}
      *    }
      * )
      * @param Request $request
@@ -49,6 +49,26 @@ class ApiEstateAgentController extends ApiAbstractController
 
         return $this->successResponse([
             'items' => $this->get('est.agent')->findByPhone($phone)
+        ]);
+    }
+
+    /**
+     * @ApiDoc(
+     *    section="estate-agent",
+     *    description="Find by url",
+     *    parameters={
+     *        {"name"="url", "dataType"="string", "required"=true}
+     *    }
+     * )
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function findUrlAction(Request $request)
+    {
+        $url = $request->query->get('url');
+
+        return $this->successResponse([
+            'items' => $this->get('est.agent')->findByUrl($url)
         ]);
     }
 }

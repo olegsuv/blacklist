@@ -23,4 +23,16 @@ class SAdvertisementRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery()
             ->getArrayResult();
     }
+
+    public function findByUrl($url)
+    {
+        return $this->createQueryBuilder('a')
+            ->select('a.comment, a.url')
+            ->where('a.url = :url')
+            ->setParameter('url', $url)
+            ->setMaxResults(10)
+            ->orderBy('a.id', 'DESC')
+            ->getQuery()
+            ->getArrayResult();
+    }
 }

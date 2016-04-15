@@ -54,4 +54,9 @@ class EstateAgentService
     {
         return $this->doctrine->getRepository('AppBundle:SAdvertisement')->findByPhone($phone);
     }
+
+    public function findByUrl($url)
+    {
+        return $this->doctrine->getRepository('AppBundle:SAdvertisement')->findByUrl($url);
+    }
 }
