@@ -30,7 +30,9 @@ class DatabaseTesterService
     public function clear()
     {
         $this->truncate(
-            'SEstateAgentPhone'
+            'SEstateAgentPhone',
+            'SAdvertisementToPhone',
+            'SAdvertisement'
         );
     }
 }

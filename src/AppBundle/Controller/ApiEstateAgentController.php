@@ -2,8 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\SEstateAgentPhone;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -23,16 +21,13 @@ class ApiEstateAgentController extends ApiAbstractController
      */
     public function createAction(Request $request)
     {
-        $phone = $request->request->get('phone');
+        $phones = $request->request->get('phones');
+        $url = $request->request->get('url');
+        $comment = $request->request->get('comment');
+        $title = $request->request->get('title');
+        $description = $request->request->get('description');
 
-        $agentPhone = new SEstateAgentPhone();
-
-        $agentPhone
-            ->setPhone($phone)
-            ->setInserted(new \DateTime());
-
-        $this->get('doctrine')->getManager()->persist($agentPhone);
-        $this->get('doctrine')->getManager()->flush();
+        $this->get('est.agent')->create($comment, $phones, $url, $title, $description);
 
         return $this->successResponse();
     }
@@ -48,26 +43,10 @@ class ApiEstateAgentController extends ApiAbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    public function findAction(Request $request)
+    public function findPhoneAction(Request $request)
     {
         $phone = $request->query->get('phone');
 
-        $agentPhone = $this
-            ->get('doctrine')
-            ->getRepository('AppBundle:SEstateAgentPhone')
-            ->findOneBy(['phone' => $phone]);
-
-        if ($agentPhone) {
-            return $this->successResponse([
-                'data' => [
-                    'phone' => $agentPhone->getPhone()
-                ],
-            ]);
-
-        }
-
-        return $this->successResponse([
-            'data' => null,
-        ]);
+        return $this->successResponse($this->get('est.agent')->findByPhone($phone));
     }
 }

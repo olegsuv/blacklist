@@ -3,7 +3,12 @@ estate_agent_create:
     defaults: { _controller: AppBundle:ApiEstateAgent:create }
     methods: [ 'POST' ]
 
-estate_agent_get:
-    path:  estate/find.{_format}
-    defaults: { _controller: AppBundle:ApiEstateAgent:find }
+estate_agent_fing_by_phone:
+    path:  estate/find/phone.{_format}
+    defaults: { _controller: AppBundle:ApiEstateAgent:findPhone }
+    methods: [ 'GET' ]
+
+estate_agent_fing_by_url:
+    path:  estate/find/url.{_format}
+    defaults: { _controller: AppBundle:ApiEstateAgent:findUrl }
     methods: [ 'GET' ]

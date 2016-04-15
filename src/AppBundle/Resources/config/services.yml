@@ -4,7 +4,13 @@ services:
         arguments:
             - '@doctrine'
 
+    est.agent.phone:
+        class: AppBundle\Service\EstateAgentPhoneService
+        arguments:
+            - '@doctrine'
+
     est.agent:
         class: AppBundle\Service\EstateAgentService
         arguments:
             - '@doctrine'
+            - '@est.agent.phone'
