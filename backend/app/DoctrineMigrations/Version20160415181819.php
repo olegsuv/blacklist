@@ -19,6 +19,7 @@ class Version20160415181819 extends AbstractMigration
             CREATE TABLE `s_estate_agent_phone`(
                 `id` INT(11) PRIMARY KEY AUTO_INCREMENT,
                 `phone` CHAR(12) NOT NULL,
+                `inserted` DATETIME NOT NULL,
                 UNIQUE KEY UNIQUE_PHONE (`phone`)
             );
         ');
