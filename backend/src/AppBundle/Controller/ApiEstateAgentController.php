@@ -24,4 +24,28 @@ class ApiEstateAgentController extends Controller
 
         return new JsonResponse([], JsonResponse::HTTP_CREATED);
     }
+
+    public function findAction(Request $request)
+    {
+        $phone = $request->query->get('phone');
+
+        $agentPhone = $this
+            ->get('doctrine')
+            ->getRepository('AppBundle:SEstateAgentPhone')
+            ->findOneBy(['phone' => $phone]);
+
+        if ($agentPhone) {
+            return new JsonResponse([
+                'exists' => true,
+                'data' => [
+                    'phone' => $agentPhone->getPhone()
+                ],
+            ]);
+        }
+
+        return new JsonResponse([
+            'exists' => false,
+            'data' => null,
+        ]);
+    }
 }

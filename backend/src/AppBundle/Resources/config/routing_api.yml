@@ -2,3 +2,8 @@ estate_agent_create:
     path:  estate.{_format}
     defaults: { _controller: AppBundle:ApiEstateAgent:create }
     methods: [ 'POST' ]
+
+estate_agent_get:
+    path:  estate/find.{_format}
+    defaults: { _controller: AppBundle:ApiEstateAgent:find }
+    methods: [ 'GET' ]
