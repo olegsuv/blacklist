@@ -6,11 +6,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
-class ApiEstateAgentController extends ApiAbstractController
+class ApiEstateAdvertisementController extends ApiAbstractController
 {
     /**
      * @ApiDoc(
-     *    section="estate-agent",
+     *    section="estate-advertisement",
      *    description="Create",
      *    requirements={
      *        {"name"="phone", "dataType"="string", "required"=true}
@@ -27,14 +27,14 @@ class ApiEstateAgentController extends ApiAbstractController
         $title = $request->request->get('title');
         $description = $request->request->get('description');
 
-        $this->get('est.agent')->create($comment, $phones, $url, $title, $description);
+        $this->get('est.advertisement')->create($comment, $phones, $url, $title, $description);
 
         return $this->successResponse();
     }
 
     /**
      * @ApiDoc(
-     *    section="estate-agent",
+     *    section="estate-advertisement",
      *    description="Find by phone",
      *    requirements={
      *        {"name"="phone", "dataType"="string", "required"=true}
@@ -48,13 +48,13 @@ class ApiEstateAgentController extends ApiAbstractController
         $phone = $request->query->get('phone');
 
         return $this->successResponse([
-            'items' => $this->get('est.agent')->findByPhone($phone)
+            'items' => $this->get('est.advertisement')->findByPhone($phone)
         ]);
     }
 
     /**
      * @ApiDoc(
-     *    section="estate-agent",
+     *    section="estate-advertisement",
      *    description="Find by url",
      *    parameters={
      *        {"name"="url", "dataType"="string", "required"=true}
@@ -68,7 +68,22 @@ class ApiEstateAgentController extends ApiAbstractController
         $url = $request->query->get('url');
 
         return $this->successResponse([
-            'items' => $this->get('est.agent')->findByUrl($url)
+            'items' => $this->get('est.advertisement')->findByUrl($url)
+        ]);
+    }
+
+    /**
+     * @ApiDoc(
+     *    section="estate-advertisement",
+     *    description="All phones"
+     * )
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function allPhoneAction(Request $request)
+    {
+        return $this->successResponse([
+            'items' => $this->get('est.agent.phone')->getAll()
         ]);
     }
 }

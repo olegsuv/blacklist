@@ -45,4 +45,9 @@ class EstateAgentPhoneService
 
         return $existMap;
     }
+
+    public function getAll()
+    {
+        return $this->doctrine->getRepository('AppBundle:SEstateAgentPhone')->findAll();
+    }
 }

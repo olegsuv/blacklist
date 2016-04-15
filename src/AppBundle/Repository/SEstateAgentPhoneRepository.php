@@ -10,4 +10,13 @@ namespace AppBundle\Repository;
  */
 class SEstateAgentPhoneRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findAll()
+    {
+        $source = $this->createQueryBuilder('p')
+            ->select('p.phone')
+            ->getQuery()
+            ->getArrayResult();
+
+        return array_column($source, 'phone');
+    }
 }
