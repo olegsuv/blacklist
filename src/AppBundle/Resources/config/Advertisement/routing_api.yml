@@ -15,5 +15,5 @@ estate_advertisement_fing_by_url:
 
 estate_advertisement_all_phones:
     path:  phones.{_format}
-    defaults: { _controller: AppBundle:ApiEstateAdvertisement:allPhone }
+    defaults: { _controller: AppBundle:ApiEstatePhone:allPhone }
     methods: [ 'GET' ]

@@ -71,19 +71,4 @@ class ApiEstateAdvertisementController extends ApiAbstractController
             'items' => $this->get('est.advertisement')->findByUrl($url)
         ]);
     }
-
-    /**
-     * @ApiDoc(
-     *    section="estate-advertisement",
-     *    description="All phones"
-     * )
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function allPhoneAction(Request $request)
-    {
-        return $this->successResponse([
-            'items' => $this->get('est.agent.phone')->getAll()
-        ]);
-    }
 }

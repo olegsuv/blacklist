@@ -4,7 +4,7 @@ namespace Tests\AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class ApiEstateAgentControllerTest extends WebTestCase
+class ApiAllControllerTest extends WebTestCase
 {
     public function test()
     {
@@ -99,6 +99,5 @@ class ApiEstateAgentControllerTest extends WebTestCase
         ];
 
         $this->assertEquals($expect, json_decode($client->getResponse()->getContent(), true));
-
     }
 }
