@@ -1,4 +1,4 @@
-alert('blacklist init');
+// alert('blacklist init');
 
 function Panel() {
     'use strict';

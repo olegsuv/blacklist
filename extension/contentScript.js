@@ -1,7 +1,7 @@
 /**
  * Created by olegsuv on 16.04.2016.
  */
-alert('inject init');
+// alert('inject init');
 
 function injectScript(file, node) {
     var th = document.getElementsByTagName(node)[0];
