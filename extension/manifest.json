@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+  "name": "Rieltor Blacklist",
+  "description": "This extension shows status of article author searched in our database",
+  "version": "1.0",
+  "browser_action": {
+    "default_icon": "blacklist-128.png"
+  },
+  "permissions": [
+    "activeTab",
+    "tabs"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "http://olx.ua/*"
+      ],
+      "js": [
+        "jquery.min.js",
+        "contentScript.js"
+      ]
+    }
+  ],
+  "web_accessible_resources": [
+    "js/*"
+  ]
+}
