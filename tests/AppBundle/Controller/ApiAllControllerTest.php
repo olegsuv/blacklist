@@ -3,6 +3,8 @@
 namespace Tests\AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Client;
 
 class ApiAllControllerTest extends WebTestCase
 {
@@ -14,12 +16,24 @@ class ApiAllControllerTest extends WebTestCase
 
         $container->get('rqs.database.tester')->clear();
 
+        $client->request('GET', '/api/v1/estate/advertisement/find/phone.json', [
+            'phone' => '380630000000'
+        ]);
+
+        $this->assertResponseSuccess($client);
+        $expect = [
+            'success' => true,
+            'items' => []
+        ];
+
+        $this->assertResponseData($expect, $client);
+
         $client->request('POST', '/api/v1/estate/advertisement/add.json', [
             'comment' => 'Ignore after call',
             'phones' => ['380630000000'],
             'url' => 'http://somesite.ua/room/17',
         ]);
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertResponseSuccess($client);
 
         $client->request('POST', '/api/v1/estate/advertisement/add.json', [
             'comment' => 'Missing',
@@ -27,13 +41,13 @@ class ApiAllControllerTest extends WebTestCase
             'url' => 'http://somesite.ua/room/18',
         ]);
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertResponseSuccess($client);
 
         $client->request('GET', '/api/v1/estate/advertisement/find/phone.json', [
             'phone' => '380630000000'
         ]);
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertResponseSuccess($client);
 
         $expect = [
             'success' => true,
@@ -50,12 +64,14 @@ class ApiAllControllerTest extends WebTestCase
                 ],
             ]
         ];
+
+        $this->assertResponseData($expect, $client);
 
         $client->request('GET', '/api/v1/estate/advertisement/find/phone.json', [
             'phone' => '380631234567'
         ]);
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertResponseSuccess($client);
 
         $expect = [
             'success' => true,
@@ -68,13 +84,13 @@ class ApiAllControllerTest extends WebTestCase
             ]
         ];
 
-        $this->assertEquals($expect, json_decode($client->getResponse()->getContent(), true));
+        $this->assertResponseData($expect, $client);
 
         $client->request('GET', '/api/v1/estate/advertisement/find/url.json', [
             'url' => 'http://somesite.ua/room/17'
         ]);
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertResponseSuccess($client);
 
         $expect = [
             'success' => true,
@@ -87,17 +103,27 @@ class ApiAllControllerTest extends WebTestCase
             ]
         ];
 
-        $this->assertEquals($expect, json_decode($client->getResponse()->getContent(), true));
+        $this->assertResponseData($expect, $client);
 
         $client->request('GET', '/api/v1/estate/advertisement/phones.json');
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertResponseSuccess($client);
 
         $expect = [
             'success' => true,
             'items' => ['380630000000', '380631234567']
         ];
 
+        $this->assertResponseData($expect, $client);
+    }
+
+    private function assertResponseSuccess(Client $client)
+    {
+        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+    }
+
+    private function assertResponseData($expect, Client $client)
+    {
         $this->assertEquals($expect, json_decode($client->getResponse()->getContent(), true));
     }
 }
