@@ -43,7 +43,7 @@ function Panel(window) {
             url: "http://10.211.2.219:8080/SampleWebService/sample.do",
             data: transferData,
             dataType: "jsonp",
-            jsonp: "setBlacklist",
+            jsonp: "getBlacklist",
             success: function (xml) {
                 alert('success: ' + xml);
             },
@@ -65,6 +65,6 @@ $('body').bind('adPageShowContact', function(){
     blacklist.sendData();
 });
 
-window.setBlacklist = function (data) {
-    alert('setBlacklist: ' + data);
+window.getBlacklist = function (data) {
+    alert('getBlacklist: ' + data);
 };
