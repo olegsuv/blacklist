@@ -120,7 +120,11 @@ class ApiEstateAdvertisementController extends ApiAbstractController
     public function searchAction(Request $request)
     {
         $url = $request->query->get('url');
-        $phones = $request->query->get('phones');
+        $requestPhones = $request->query->get('phones');
+
+        $phoneService = $this->get('est.phone');
+
+        $phones = array_filter($requestPhones, [$phoneService, 'valid']);
 
         return $this->successResponse([
             'url' => $this->get('est.advertisement')->existUrl($url),

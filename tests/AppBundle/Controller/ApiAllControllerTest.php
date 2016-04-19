@@ -164,6 +164,7 @@ class ApiAllControllerTest extends WebTestCase
                 '380630000000',
                 '380931111111',
                 '380932222222',
+                'some fantasy phone',
             ]
         ]);
 
