@@ -21,6 +21,13 @@ class ApiAllControllerTest extends WebTestCase
         ]);
 
         $this->assertResponseError($client, 'Comment required');
+
+        $client->request('POST', '/api/v1/estate/advertisement/add.json', [
+            'comment' => 'Page with empty phones',
+            'phones' => []
+        ]);
+
+        $this->assertResponseError($client, 'Phones required');
     }
 
     public function test()
