@@ -4,14 +4,20 @@ namespace Tests\AppBundle\Service;
 
 class PhoneServiceTest extends AbstractServiceTest
 {
-    public function test()
+    /**
+     * @dataProvider validDataProvider
+     * @param $phone
+     */
+    public function testValid($phone)
     {
-
+        $this->assertTrue($this->getService()->valid($phone));
     }
 
-    public function dataProvider()
+    public function validDataProvider()
     {
-
+        return [
+            ['380631112233'],
+        ];
     }
 
     private function getService()
