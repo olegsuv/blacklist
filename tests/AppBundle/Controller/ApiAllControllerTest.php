@@ -14,7 +14,7 @@ class ApiAllControllerTest extends WebTestCase
 
         $client->request('POST', '/api/v1/estate/advertisement/add.json');
 
-        $this->assertResponseError($client);
+        $this->assertResponseError($client, 'Comment required');
     }
 
     public function test()
@@ -167,9 +167,13 @@ class ApiAllControllerTest extends WebTestCase
         $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
     }
 
-    private function assertResponseError(Client $client)
+    private function assertResponseError(Client $client, $expect)
     {
         $this->assertEquals(Response::HTTP_BAD_REQUEST, $client->getResponse()->getStatusCode());
+
+        $json = json_decode($client->getResponse()->getContent(), true);
+
+        $this->assertEquals($expect, $json['message']);
     }
 
     private function assertResponseData($expect, Client $client)
