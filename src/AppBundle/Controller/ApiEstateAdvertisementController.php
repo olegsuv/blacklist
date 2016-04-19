@@ -51,7 +51,7 @@ class ApiEstateAdvertisementController extends ApiAbstractController
             return $this->errorResponse("Invalid phone '{$invalid[0]}'");
         }
 
-        $this->get('est.advertisement')->create($comment, $phones, $url, $title, $description);
+        $this->get('est.advertisement')->create($comment, array_unique($phones), $url, $title, $description);
 
         return $this->successResponse();
     }

@@ -8,6 +8,7 @@ services:
         class: AppBundle\Service\EstateAgentPhoneService
         arguments:
             - '@doctrine'
+            - '@est.phone'
 
     est.advertisement:
         class: AppBundle\Service\EstateAgentService
