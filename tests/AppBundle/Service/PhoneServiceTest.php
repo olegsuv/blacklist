@@ -22,6 +22,16 @@ class PhoneServiceTest extends AbstractServiceTest
         $this->assertFalse($this->getService()->valid($phone));
     }
 
+    /**
+     * @dataProvider normalizeDataProvider
+     * @param $normalize
+     * @param $phone
+     */
+    public function testNormalize($normalize, $phone)
+    {
+        $this->assertSame($normalize, $this->getService()->normalize($phone));
+    }
+
     public function validDataProvider()
     {
         return [
@@ -32,6 +42,19 @@ class PhoneServiceTest extends AbstractServiceTest
             ['8(063) 111-22-33'],
             ['(063) 111-22-33'],
             ['063 111-22-33'],
+        ];
+    }
+
+    public function normalizeDataProvider()
+    {
+        return [
+            ['380631112233', '380631112233'],
+            ['380631112233', '38063 111 22 33'],
+            ['380631112233', '38(063) 111-22-33'],
+            ['380631112233', '+38(063) 111-22-33'],
+            ['380631112233', '8(063) 111-22-33'],
+            ['380631112233', '(063) 111-22-33'],
+            ['380631112233', '063 111-22-33'],
         ];
     }
 
