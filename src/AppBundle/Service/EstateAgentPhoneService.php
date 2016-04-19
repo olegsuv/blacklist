@@ -50,4 +50,21 @@ class EstateAgentPhoneService
     {
         return $this->doctrine->getRepository('AppBundle:SEstateAgentPhone')->findAll();
     }
+
+    public function existMap(array $phones)
+    {
+        if (empty($phones)) {
+            return null;
+        }
+
+        $exists = $this->doctrine->getRepository('AppBundle:SEstateAgentPhone')->existList($phones);
+
+        $map = array_fill_keys($phones, false);
+
+        foreach ($exists as $phone) {
+            $map[$phone] = true;
+        }
+
+        return $map;
+    }
 }

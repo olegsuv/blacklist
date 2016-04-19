@@ -93,4 +93,9 @@ class EstateAgentService
 
         return array_values($map);
     }
+
+    public function existUrl($url)
+    {
+        return $url && $this->doctrine->getRepository('AppBundle:SAdvertisement')->existUrl($url);
+    }
 }

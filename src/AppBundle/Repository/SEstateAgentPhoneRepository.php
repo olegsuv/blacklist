@@ -19,4 +19,16 @@ class SEstateAgentPhoneRepository extends \Doctrine\ORM\EntityRepository
 
         return array_column($source, 'phone');
     }
+
+    public function existList(array $phones)
+    {
+        $source = $this->createQueryBuilder('p')
+            ->select('p.phone')
+            ->where('p.phone IN (:phones)')
+            ->setParameter('phones', $phones)
+            ->getQuery()
+            ->getArrayResult();
+
+        return array_column($source, 'phone');
+    }
 }

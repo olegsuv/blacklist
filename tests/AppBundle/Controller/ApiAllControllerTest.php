@@ -16,7 +16,7 @@ class ApiAllControllerTest extends WebTestCase
 
         $container->get('rqs.database.tester')->clear();
 
-        $client->request('GET', '/api/v1/estate/advertisement/find/phone.json', [
+        $client->request('GET', '/api/v1/estate/advertisement/search/phone.json', [
             'phone' => '380630000000'
         ]);
 
@@ -31,7 +31,7 @@ class ApiAllControllerTest extends WebTestCase
         $client->request('POST', '/api/v1/estate/advertisement/add.json', [
             'comment' => 'Ignore after call',
             'phones' => ['380630000000'],
-            'url' => 'http://somesite.ua/room/17',
+            'url' => 'http://somesite.ua/room/23',
         ]);
         $this->assertResponseSuccess($client);
 
@@ -43,7 +43,7 @@ class ApiAllControllerTest extends WebTestCase
 
         $this->assertResponseSuccess($client);
 
-        $client->request('GET', '/api/v1/estate/advertisement/find/phone.json', [
+        $client->request('GET', '/api/v1/estate/advertisement/search/phone.json', [
             'phone' => '380630000000'
         ]);
 
@@ -60,14 +60,14 @@ class ApiAllControllerTest extends WebTestCase
                 [
                     'comment' => 'Ignore after call',
                     'phones' => ['380630000000'],
-                    'url' => 'http://somesite.ua/room/17',
+                    'url' => 'http://somesite.ua/room/23',
                 ],
             ]
         ];
 
         $this->assertResponseData($expect, $client);
 
-        $client->request('GET', '/api/v1/estate/advertisement/find/phone.json', [
+        $client->request('GET', '/api/v1/estate/advertisement/search/phone.json', [
             'phone' => '380631234567'
         ]);
 
@@ -86,8 +86,8 @@ class ApiAllControllerTest extends WebTestCase
 
         $this->assertResponseData($expect, $client);
 
-        $client->request('GET', '/api/v1/estate/advertisement/find/url.json', [
-            'url' => 'http://somesite.ua/room/17'
+        $client->request('GET', '/api/v1/estate/advertisement/search/url.json', [
+            'url' => 'http://somesite.ua/room/23'
         ]);
 
         $this->assertResponseSuccess($client);
@@ -98,9 +98,47 @@ class ApiAllControllerTest extends WebTestCase
                 [
                     'comment' => 'Ignore after call',
                     'phones' => ['380630000000'],
-                    'url' => 'http://somesite.ua/room/17',
+                    'url' => 'http://somesite.ua/room/23',
                 ],
             ]
+        ];
+
+        $this->assertResponseData($expect, $client);
+
+        $client->request('GET', '/api/v1/estate/advertisement/search.json', [
+            'url' => 'http://somesite.ua/room/29',
+            'phones' => [
+                '380630000000',
+                '380931111111',
+                '380932222222',
+            ]
+        ]);
+
+        $this->assertResponseSuccess($client);
+
+        $expect = [
+            'success' => true,
+            'url' => false,
+            'phones' => [
+                '380630000000' => true,
+                '380931111111' => false,
+                '380932222222' => false,
+            ]
+        ];
+
+        $this->assertResponseData($expect, $client);
+
+        $client->request('GET', '/api/v1/estate/advertisement/search.json', [
+            'url' => 'http://somesite.ua/room/23',
+            'phones' => []
+        ]);
+
+        $this->assertResponseSuccess($client);
+
+        $expect = [
+            'success' => true,
+            'url' => true,
+            'phones' => null
         ];
 
         $this->assertResponseData($expect, $client);
