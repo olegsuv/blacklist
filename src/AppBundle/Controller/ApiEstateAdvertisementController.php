@@ -21,7 +21,7 @@ class ApiEstateAdvertisementController extends ApiAbstractController
      */
     public function createAction(Request $request)
     {
-        $phones = $request->request->get('phones');
+        $requestPhones = $request->request->get('phones');
         $url = $request->request->get('url');
         $comment = trim($request->request->get('comment'));
         $title = $request->request->get('title');
@@ -31,8 +31,24 @@ class ApiEstateAdvertisementController extends ApiAbstractController
             return $this->errorResponse('Comment required');
         }
 
-        if (empty($phones)) {
+        if (empty($requestPhones)) {
             return $this->errorResponse('Phones required');
+        }
+
+        $phoneService = $this->get('est.phone');
+        $phones = [];
+        $invalid = [];
+
+        foreach ($requestPhones as $phone) {
+            if ($phoneService->valid($phone)) {
+                $phones[] = $phoneService->normalize($phone);
+            } else {
+                $invalid[] = $phone;
+            }
+        }
+
+        if (empty($phones)) {
+            return $this->errorResponse("Invalid phone '{$invalid[0]}'");
         }
 
         $this->get('est.advertisement')->create($comment, $phones, $url, $title, $description);
