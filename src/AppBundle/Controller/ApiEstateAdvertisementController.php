@@ -23,9 +23,13 @@ class ApiEstateAdvertisementController extends ApiAbstractController
     {
         $phones = $request->request->get('phones');
         $url = $request->request->get('url');
-        $comment = $request->request->get('comment');
+        $comment = trim($request->request->get('comment'));
         $title = $request->request->get('title');
         $description = $request->request->get('description');
+
+        if (empty($comment)) {
+            return $this->errorResponse('Comment required');
+        }
 
         $this->get('est.advertisement')->create($comment, $phones, $url, $title, $description);
 
