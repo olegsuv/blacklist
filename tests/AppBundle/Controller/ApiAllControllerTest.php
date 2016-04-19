@@ -138,7 +138,7 @@ class ApiAllControllerTest extends WebTestCase
         $expect = [
             'success' => true,
             'url' => true,
-            'phones' => []
+            'phones' => null
         ];
 
         $this->assertResponseData($expect, $client);

@@ -71,4 +71,27 @@ class ApiEstateAdvertisementController extends ApiAbstractController
             'items' => $this->get('est.advertisement')->findByUrl($url)
         ]);
     }
+
+    /**
+     * @ApiDoc(
+     *    section="estate-advertisement",
+     *    description="search",
+     *    parameters={
+     *        {"name"="url", "dataType"="string", "required"=false},
+     *        {"name"="phones", "dataType"="array", "required"=false}
+     *    }
+     * )
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function searchAction(Request $request)
+    {
+        $url = $request->query->get('url');
+        $phones = $request->query->get('phones');
+
+        return $this->successResponse([
+            'url' => $this->get('est.advertisement')->existUrl($url),
+            'phones' => $this->get('est.agent.phone')->existMap($phones),
+        ]);
+    }
 }

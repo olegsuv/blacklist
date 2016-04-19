@@ -3,14 +3,19 @@ estate_advertisement_add:
     defaults: { _controller: AppBundle:ApiEstateAdvertisement:create }
     methods: [ 'POST' ]
 
-estate_advertisement_fing_by_phone:
+estate_advertisement_search_phone:
     path:  search/phone.{_format}
     defaults: { _controller: AppBundle:ApiEstateAdvertisement:findPhone }
     methods: [ 'GET' ]
 
-estate_advertisement_fing_by_url:
+estate_advertisement_search_url:
     path:  search/url.{_format}
     defaults: { _controller: AppBundle:ApiEstateAdvertisement:findUrl }
+    methods: [ 'GET' ]
+    
+estate_advertisement_search:
+    path:  search.{_format}
+    defaults: { _controller: AppBundle:ApiEstateAdvertisement:search }
     methods: [ 'GET' ]
 
 estate_advertisement_all_phones:
