@@ -162,6 +162,7 @@ class ApiAllControllerTest extends WebTestCase
             'url' => 'http://somesite.ua/room/29',
             'phones' => [
                 '380630000000',
+                '+38 (063) 000-00-00',
                 '380931111111',
                 '380932222222',
                 'some fantasy phone',
@@ -175,6 +176,7 @@ class ApiAllControllerTest extends WebTestCase
             'url' => false,
             'phones' => [
                 '380630000000' => true,
+                '+38 (063) 000-00-00' => true,
                 '380931111111' => false,
                 '380932222222' => false,
             ]

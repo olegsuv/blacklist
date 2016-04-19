@@ -8,10 +8,12 @@ use Doctrine\Bundle\DoctrineBundle\Registry;
 class EstateAgentPhoneService
 {
     private $doctrine;
+    private $phoneService;
 
-    public function __construct(Registry $doctrine)
+    public function __construct(Registry $doctrine, PhoneService $phoneService)
     {
         $this->doctrine = $doctrine;
+        $this->phoneService = $phoneService;
     }
 
     /**
@@ -57,12 +59,23 @@ class EstateAgentPhoneService
             return null;
         }
 
-        $exists = $this->doctrine->getRepository('AppBundle:SEstateAgentPhone')->existList($phones);
+        $normalizeMap = [];
+        $deNormalizeListMap = [];
+
+        foreach ($phones as $phone) {
+            $normalize = $this->phoneService->normalize($phone);
+            $normalizeMap[$phone] = $normalize;
+            $deNormalizeListMap[$normalize][] = $phone;
+        }
+
+        $exists = $this->doctrine->getRepository('AppBundle:SEstateAgentPhone')->existList($normalizeMap);
 
         $map = array_fill_keys($phones, false);
 
-        foreach ($exists as $phone) {
-            $map[$phone] = true;
+        foreach ($exists as $normalize) {
+            foreach ($deNormalizeListMap[$normalize] as $phone) {
+                $map[$phone] = true;
+            }
         }
 
         return $map;
