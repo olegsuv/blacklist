@@ -113,6 +113,14 @@ class ApiAllControllerTest extends WebTestCase
         $this->assertResponseData($expect, $client);
 
         $client->request('GET', '/api/v1/estate/advertisement/search/phone.json', [
+            'phone' => '+38(063) 000-00-00'
+        ]);
+
+        $this->assertResponseSuccess($client);
+
+        $this->assertResponseData($expect, $client);
+
+        $client->request('GET', '/api/v1/estate/advertisement/search/phone.json', [
             'phone' => '380631234567'
         ]);
 

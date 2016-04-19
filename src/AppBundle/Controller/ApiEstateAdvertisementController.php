@@ -71,9 +71,18 @@ class ApiEstateAdvertisementController extends ApiAbstractController
     {
         $phone = $request->query->get('phone');
 
-        return $this->successResponse([
-            'items' => $this->get('est.advertisement')->findByPhone($phone)
-        ]);
+        $phoneService = $this->get('est.phone');
+
+        if ($phoneService->valid($phone)) {
+            return $this->successResponse([
+                'items' => $this->get('est.advertisement')->findByPhone(
+                    $phoneService->normalize($phone)
+                )
+            ]);
+
+        }
+
+        return $this->errorResponse("Invalid phone '$phone'");
     }
 
     /**
