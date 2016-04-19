@@ -8,7 +8,7 @@ class PhoneService
 
     public function valid($phone)
     {
-        $onlyNumber = preg_replace('/\D/', '', $phone);
+        $onlyNumber = $this->digits($phone);
 
         if (strlen($onlyNumber) < 9) {
             return false;
@@ -21,6 +21,15 @@ class PhoneService
 
     public function normalize($phone)
     {
+        $onlyNumber = $this->digits($phone);
 
+        $required = substr($onlyNumber, -10);
+
+        return "38$required";
+    }
+
+    private function digits($phone)
+    {
+        return preg_replace('/\D/', '', $phone);
     }
 }
