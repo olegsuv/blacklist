@@ -16,7 +16,7 @@ class ApiAllControllerTest extends WebTestCase
 
         $container->get('rqs.database.tester')->clear();
 
-        $client->request('GET', '/api/v1/estate/advertisement/find/phone.json', [
+        $client->request('GET', '/api/v1/estate/advertisement/search/phone.json', [
             'phone' => '380630000000'
         ]);
 
@@ -43,7 +43,7 @@ class ApiAllControllerTest extends WebTestCase
 
         $this->assertResponseSuccess($client);
 
-        $client->request('GET', '/api/v1/estate/advertisement/find/phone.json', [
+        $client->request('GET', '/api/v1/estate/advertisement/search/phone.json', [
             'phone' => '380630000000'
         ]);
 
@@ -67,7 +67,7 @@ class ApiAllControllerTest extends WebTestCase
 
         $this->assertResponseData($expect, $client);
 
-        $client->request('GET', '/api/v1/estate/advertisement/find/phone.json', [
+        $client->request('GET', '/api/v1/estate/advertisement/search/phone.json', [
             'phone' => '380631234567'
         ]);
 
@@ -86,7 +86,7 @@ class ApiAllControllerTest extends WebTestCase
 
         $this->assertResponseData($expect, $client);
 
-        $client->request('GET', '/api/v1/estate/advertisement/find/url.json', [
+        $client->request('GET', '/api/v1/estate/advertisement/search/url.json', [
             'url' => 'http://somesite.ua/room/17'
         ]);
 
