@@ -44,6 +44,17 @@ class ApiAllControllerTest extends WebTestCase
         $this->assertResponseSuccess($client);
     }
 
+    public function testSearchPhone()
+    {
+        $client = static::createClient();
+
+        $client->request('GET', '/api/v1/estate/advertisement/search/phone.json', [
+            'phone' => '+38 (063) 1 xxx xxx'
+        ]);
+
+        $this->assertResponseError($client, "Invalid phone '+38 (063) 1 xxx xxx'");
+    }
+
     public function test()
     {
         $client = static::createClient();
