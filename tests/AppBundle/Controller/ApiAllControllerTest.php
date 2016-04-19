@@ -8,13 +8,20 @@ use Symfony\Component\HttpKernel\Client;
 
 class ApiAllControllerTest extends WebTestCase
 {
+    public function testAddActionValidation()
+    {
+        $client = static::createClient();
+
+        $client->request('POST', '/api/v1/estate/advertisement/add.json');
+
+        $this->assertResponseError($client);
+    }
+
     public function test()
     {
         $client = static::createClient();
 
-        $container = static::$kernel->getContainer();
-
-        $container->get('rqs.database.tester')->clear();
+        $this->clear();
 
         $client->request('GET', '/api/v1/estate/advertisement/search/phone.json', [
             'phone' => '380630000000'
@@ -160,8 +167,20 @@ class ApiAllControllerTest extends WebTestCase
         $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
     }
 
+    private function assertResponseError(Client $client)
+    {
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $client->getResponse()->getStatusCode());
+    }
+
     private function assertResponseData($expect, Client $client)
     {
         $this->assertEquals($expect, json_decode($client->getResponse()->getContent(), true));
+    }
+
+    private function clear()
+    {
+        $container = static::$kernel->getContainer();
+
+        $container->get('rqs.database.tester')->clear();
     }
 }
