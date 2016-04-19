@@ -31,6 +31,10 @@ class ApiEstateAdvertisementController extends ApiAbstractController
             return $this->errorResponse('Comment required');
         }
 
+        if (empty($phones)) {
+            return $this->errorResponse('Phones required');
+        }
+
         $this->get('est.advertisement')->create($comment, $phones, $url, $title, $description);
 
         return $this->successResponse();
