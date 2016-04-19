@@ -28,6 +28,13 @@ class ApiAllControllerTest extends WebTestCase
         ]);
 
         $this->assertResponseError($client, 'Phones required');
+
+        $client->request('POST', '/api/v1/estate/advertisement/add.json', [
+            'comment' => 'Page with empty phones',
+            'phones' => ['1']
+        ]);
+
+        $this->assertResponseError($client, "Invalid phone '1'");
     }
 
     public function test()
