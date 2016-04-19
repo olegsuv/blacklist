@@ -8,13 +8,58 @@ use Symfony\Component\HttpKernel\Client;
 
 class ApiAllControllerTest extends WebTestCase
 {
+    public function testAddActionValidation()
+    {
+        $client = static::createClient();
+
+        $client->request('POST', '/api/v1/estate/advertisement/add.json');
+
+        $this->assertResponseError($client, 'Comment required');
+
+        $client->request('POST', '/api/v1/estate/advertisement/add.json', [
+            'comment' => ' '
+        ]);
+
+        $this->assertResponseError($client, 'Comment required');
+
+        $client->request('POST', '/api/v1/estate/advertisement/add.json', [
+            'comment' => 'Page with empty phones',
+            'phones' => []
+        ]);
+
+        $this->assertResponseError($client, 'Phones required');
+
+        $client->request('POST', '/api/v1/estate/advertisement/add.json', [
+            'comment' => 'Page with empty phones',
+            'phones' => ['1']
+        ]);
+
+        $this->assertResponseError($client, "Invalid phone '1'");
+
+        $client->request('POST', '/api/v1/estate/advertisement/add.json', [
+            'comment' => 'Page with empty phones',
+            'phones' => ['1', '+38(063) 111-22-33']
+        ]);
+
+        $this->assertResponseSuccess($client);
+    }
+
+    public function testSearchPhone()
+    {
+        $client = static::createClient();
+
+        $client->request('GET', '/api/v1/estate/advertisement/search/phone.json', [
+            'phone' => '+38 (063) 1 xxx xxx'
+        ]);
+
+        $this->assertResponseError($client, "Invalid phone '+38 (063) 1 xxx xxx'");
+    }
+
     public function test()
     {
         $client = static::createClient();
 
-        $container = static::$kernel->getContainer();
-
-        $container->get('rqs.database.tester')->clear();
+        $this->clear();
 
         $client->request('GET', '/api/v1/estate/advertisement/search/phone.json', [
             'phone' => '380630000000'
@@ -68,6 +113,14 @@ class ApiAllControllerTest extends WebTestCase
         $this->assertResponseData($expect, $client);
 
         $client->request('GET', '/api/v1/estate/advertisement/search/phone.json', [
+            'phone' => '+38(063) 000-00-00'
+        ]);
+
+        $this->assertResponseSuccess($client);
+
+        $this->assertResponseData($expect, $client);
+
+        $client->request('GET', '/api/v1/estate/advertisement/search/phone.json', [
             'phone' => '380631234567'
         ]);
 
@@ -111,6 +164,7 @@ class ApiAllControllerTest extends WebTestCase
                 '380630000000',
                 '380931111111',
                 '380932222222',
+                'some fantasy phone',
             ]
         ]);
 
@@ -160,8 +214,24 @@ class ApiAllControllerTest extends WebTestCase
         $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
     }
 
+    private function assertResponseError(Client $client, $expect)
+    {
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $client->getResponse()->getStatusCode());
+
+        $json = json_decode($client->getResponse()->getContent(), true);
+
+        $this->assertEquals($expect, $json['message']);
+    }
+
     private function assertResponseData($expect, Client $client)
     {
         $this->assertEquals($expect, json_decode($client->getResponse()->getContent(), true));
+    }
+
+    private function clear()
+    {
+        $container = static::$kernel->getContainer();
+
+        $container->get('rqs.database.tester')->clear();
     }
 }

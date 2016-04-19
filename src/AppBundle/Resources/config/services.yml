@@ -14,3 +14,6 @@ services:
         arguments:
             - '@doctrine'
             - '@est.agent.phone'
+
+    est.phone:
+        class: AppBundle\Service\PhoneService
