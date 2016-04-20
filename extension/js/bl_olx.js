@@ -5,9 +5,9 @@ function Panel() {
 
     this.panel = $('<div class="blacklistPanel"></div>');
     this.phoneBlock = $('.link-phone.big');
-    this.updatePanel = function(text, css) {
-        if (!text) {
-            text = this.phoneBlock.find('strong').text();
+    this.updatePanel = function(xml, css) {
+        if (!xml) {
+            xml = this.phoneBlock.find('strong').text();
         }
         if (!css) {
             css = {
@@ -17,11 +17,23 @@ function Panel() {
                 width: '100%',
                 lineHeight: '40px',
                 background: 'white',
+                color: 'black',
                 borderTop: '1px solid #ccc',
                 zIndex: 1000000
             };
         }
-        this.panel.css(css).html(text);
+        if (xml.statusText == "error") {
+            css.color = 'red';
+        }
+        if (xml.statusText == "success") {
+            css.color = 'green';
+        }
+        window.panelCheck = {
+            xml: xml,
+            css: css
+        };
+        console.log(xml, css);
+        this.panel.css(css).html(xml.responseText || 'error');
     };
     this.init = function () {
         this.panel.appendTo('body');
@@ -41,12 +53,10 @@ function Panel() {
             data: transferData,
             dataType: "json",
             success: function (xml) {
-                console.log('success: ' + xml);
-                me.updatePanel('success: ' + xml);
+                me.updatePanel(xml);
             },
             error: function (xml) {
-                console.log('error: ' + xml);
-                me.updatePanel('error: ' + xml);
+                me.updatePanel(xml);
             }
         });
     };
