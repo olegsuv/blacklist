@@ -21,13 +21,37 @@ class ApiEstateAdvertisementController extends ApiAbstractController
      */
     public function createAction(Request $request)
     {
-        $phones = $request->request->get('phones');
+        $requestPhones = $request->request->get('phones');
         $url = $request->request->get('url');
-        $comment = $request->request->get('comment');
+        $comment = trim($request->request->get('comment'));
         $title = $request->request->get('title');
         $description = $request->request->get('description');
 
-        $this->get('est.advertisement')->create($comment, $phones, $url, $title, $description);
+        if (empty($comment)) {
+            return $this->errorResponse('Comment required');
+        }
+
+        if (empty($requestPhones)) {
+            return $this->errorResponse('Phones required');
+        }
+
+        $phoneService = $this->get('est.phone');
+        $phones = [];
+        $invalid = [];
+
+        foreach ($requestPhones as $phone) {
+            if ($phoneService->valid($phone)) {
+                $phones[] = $phoneService->normalize($phone);
+            } else {
+                $invalid[] = $phone;
+            }
+        }
+
+        if (empty($phones)) {
+            return $this->errorResponse("Invalid phone '{$invalid[0]}'");
+        }
+
+        $this->get('est.advertisement')->create($comment, array_unique($phones), $url, $title, $description);
 
         return $this->successResponse();
     }
@@ -47,9 +71,18 @@ class ApiEstateAdvertisementController extends ApiAbstractController
     {
         $phone = $request->query->get('phone');
 
-        return $this->successResponse([
-            'items' => $this->get('est.advertisement')->findByPhone($phone)
-        ]);
+        $phoneService = $this->get('est.phone');
+
+        if ($phoneService->valid($phone)) {
+            return $this->successResponse([
+                'items' => $this->get('est.advertisement')->findByPhone(
+                    $phoneService->normalize($phone)
+                )
+            ]);
+
+        }
+
+        return $this->errorResponse("Invalid phone '$phone'");
     }
 
     /**
@@ -69,6 +102,33 @@ class ApiEstateAdvertisementController extends ApiAbstractController
 
         return $this->successResponse([
             'items' => $this->get('est.advertisement')->findByUrl($url)
+        ]);
+    }
+
+    /**
+     * @ApiDoc(
+     *    section="estate-advertisement",
+     *    description="search",
+     *    parameters={
+     *        {"name"="url", "dataType"="string", "required"=false},
+     *        {"name"="phones", "dataType"="array", "required"=false}
+     *    }
+     * )
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function searchAction(Request $request)
+    {
+        $url = $request->query->get('url');
+        $requestPhones = $request->query->get('phones');
+
+        $phoneService = $this->get('est.phone');
+
+        $phones = array_filter($requestPhones, [$phoneService, 'valid']);
+
+        return $this->successResponse([
+            'url' => $this->get('est.advertisement')->existUrl($url),
+            'phones' => $this->get('est.agent.phone')->existMap($phones),
         ]);
     }
 }

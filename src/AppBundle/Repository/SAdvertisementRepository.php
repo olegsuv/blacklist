@@ -35,4 +35,15 @@ class SAdvertisementRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery()
             ->getArrayResult();
     }
+
+    public function existUrl($url)
+    {
+        return (bool)$this->createQueryBuilder('a')
+            ->select('1')
+            ->where('a.url = :url')
+            ->setParameter('url', $url)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }
