@@ -9,3 +9,5 @@ php bin/console server:run
 
 ##### TODO:
 * `Phone validation`
+
+stlist.vergo.space/api/doc

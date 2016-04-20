@@ -5,8 +5,12 @@ function Panel() {
 
     this.panel = $('<div class="blacklistPanel"></div>');
     this.phoneBlock = $('.link-phone.big');
-    this.updatePanel = function() {
-        this.panel.css({
+    this.updatePanel = function(text, css) {
+        if (!text) {
+            text = this.phoneBlock.find('strong').text();
+        }
+        if (!css) {
+            css = {
                 position: 'fixed',
                 bottom: 0,
                 left: 0,
@@ -15,8 +19,9 @@ function Panel() {
                 background: 'white',
                 borderTop: '1px solid #ccc',
                 zIndex: 1000000
-            })
-            .html(this.phoneBlock.find('strong').text());
+            };
+        }
+        this.panel.css(css).html(text);
     };
     this.init = function () {
         this.panel.appendTo('body');
@@ -27,26 +32,28 @@ function Panel() {
             phone: this.phoneBlock.find('strong').text(),
             url: location.href
         };
-        alert(transferData.phone + '\n' + transferData.url);
+        // alert(transferData.phone + '\n' + transferData.url);
+        var me = this;
         $.ajax({
             crossOrigin: true,
             type: "GET",
-            url: "http://10.211.2.219:8080/SampleWebService/sample.do",
+            url: "http://stlist.vergo.space/api/v1/estate/advertisement/search/phone.json",
             data: transferData,
-            dataType: "jsonp",
-            jsonp: "getBlacklist",
+            dataType: "json",
             success: function (xml) {
-                alert('success: ' + xml);
+                console.log('success: ' + xml);
+                me.updatePanel('success: ' + xml);
             },
             error: function (xml) {
-                alert('error: ' + xml);
+                console.log('error: ' + xml);
+                me.updatePanel('error: ' + xml);
             }
         });
     };
     //run
     if (this.phoneBlock.size()) {
         this.init();
-        //this.phoneBlock.find('.spoiler').click();
+        this.phoneBlock.find('.spoiler').click();
     }
 
     var me = this;
@@ -57,7 +64,3 @@ function Panel() {
 }
 
 window.blacklist = new Panel();
-
-window.getBlacklist = function (data) {
-    alert('getBlacklist: ' + data);
-};
