@@ -5,46 +5,51 @@ function Panel() {
 
     this.panel = $('<div class="blacklistPanel"></div>');
     this.phoneBlock = $('.link-phone.big');
-    this.updatePanel = function(xml, css) {
-        if (!xml) {
-            xml = this.phoneBlock.find('strong').text();
+    this.defaultCSS = {
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        width: '100%',
+        lineHeight: '40px',
+        background: 'white',
+        color: 'black',
+        borderTop: '1px solid #ccc',
+        zIndex: 1000000
+    };
+    this.updatePanel = function (xml, css, status) {
+        this.answers.push({
+            xml: xml || {},
+            css: css || {},
+            status: status || ''
+        });
+        xml = xml || this.phoneBlock.find('strong').text();
+        css = css || this.defaultCSS;
+
+        if (status == "success") {
+            var showText;
+            if (xml.items.length) {
+                css.color = 'red';
+                showText = 'Найдена информация в базе: ' + xml.items.join('; ');
+                showText = 'Найдена информация в базе: ' + xml.items.join('; ');
+            } else {
+                css.color = 'green';
+                showText = 'Телефона и адреса в базе блеклиста нет, можно звонить'
+            }
         }
-        if (!css) {
-            css = {
-                position: 'fixed',
-                bottom: 0,
-                left: 0,
-                width: '100%',
-                lineHeight: '40px',
-                background: 'white',
-                color: 'black',
-                borderTop: '1px solid #ccc',
-                zIndex: 1000000
-            };
-        }
-        if (xml.statusText == "error") {
+        if (status == "error") {
             css.color = 'red';
+            showText = 'Ошибка скрипта';
         }
-        if (xml.statusText == "success") {
-            css.color = 'green';
-        }
-        window.panelCheck = {
-            xml: xml,
-            css: css
-        };
-        console.log(xml, css);
-        this.panel.css(css).html(xml.responseText || 'error');
+        this.panel.css(css).html(showText);
     };
     this.init = function () {
         this.panel.appendTo('body');
-        this.updatePanel();
     };
     this.sendData = function () {
         var transferData = {
             phone: this.phoneBlock.find('strong').text(),
             url: location.href
         };
-        // alert(transferData.phone + '\n' + transferData.url);
         var me = this;
         $.ajax({
             crossOrigin: true,
@@ -53,13 +58,14 @@ function Panel() {
             data: transferData,
             dataType: "json",
             success: function (xml) {
-                me.updatePanel(xml);
+                me.updatePanel(xml, undefined, 'success');
             },
             error: function (xml) {
-                me.updatePanel(xml);
+                me.updatePanel(xml, undefined, 'error');
             }
         });
     };
+    this.answers = [];
     //run
     if (this.phoneBlock.size()) {
         this.init();
@@ -67,8 +73,7 @@ function Panel() {
     }
 
     var me = this;
-    $('body').bind('adPageShowContact', function(){
-        me.updatePanel();
+    $('body').bind('adPageShowContact', function () {
         me.sendData();
     });
 }
