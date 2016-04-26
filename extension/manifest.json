@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Rieltor Blacklist",
   "description": "This extension shows status of article author searched in our database",
-  "version": "1.0",
+  "version": "1.1",
   "browser_action": {
     "default_icon": "blacklist-128.png"
   },

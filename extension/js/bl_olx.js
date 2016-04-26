@@ -57,7 +57,7 @@ function Panel() {
     };
     this.getData = function () {
         var transferData = {
-            phone: this.phoneBlock.find('strong').text(),
+            phone: this.phoneBlock.find('strong').text() , //.replace(/\s/ig, '').split('\n'),
             url: location.href
         };
         var me = this;
@@ -77,7 +77,7 @@ function Panel() {
     };
     this.setData = function (comment) {
         var transferData = {
-            phone: this.phoneBlock.find('strong').text(),
+            phone: this.phoneBlock.find('strong').text().replace(/\s/ig, '').split('\n'),
             url: location.href,
             comment: comment || ''
         };
