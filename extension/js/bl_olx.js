@@ -27,33 +27,38 @@ function Panel() {
             self.setData(comment);
         }
     });
-    this.updatePanel = function (xml, css, status) {
-        this.answers.push({
-            xml: xml || {},
-            css: css || {},
-            status: status || ''
-        });
-        xml = xml || this.phoneBlock.find('strong').text();
-        css = css || this.defaultCSS;
-
-        if (status == "success") {
-            var showText;
-            if (xml.items.length) {
-                css.color = 'red';
-                showText = 'Найдена информация в базе: ' + xml.items.join('; ');
-            } else {
-                css.color = 'green';
-                showText = 'Телефона и адреса в базе блеклиста нет, можно звонить\t'
-            }
-        }
-        if (status == "error") {
-            css.color = 'red';
-            showText = 'Ошибка скрипта';
-        }
-        this.panel.css(css).html(showText).append(this.addToBlacklist);
+    this.updatePanel = function (showText, css) {
+        this.panel.css(css).html(showText);
     };
     this.init = function () {
         this.panel.appendTo('body');
+    };
+    this.processData = function (json, status, methodName) {
+        var css = this.defaultCSS;
+        if (status == "success" && json.success == true) {
+            var showText;
+            if (methodName == 'getData') {
+                if (json.items.length) {
+                    css.color = 'red';
+                    showText = 'Найдена информация в базе: ';
+                    for (var i = 0; i < json.items.length; i++) {
+                        var item = json.items[i];
+                        var tmpText = '\n' + item.phones.join('; ') + '. Комментарий: ' + item.comment;
+                        showText += tmpText;
+                    }
+                } else {
+                    css.color = 'green';
+                    showText = $('<div/>').html('Телефона и адреса в базе блеклиста нет, можно звонить\t').append(this.addToBlacklist);
+                }
+            } else {
+                css.color = 'green';
+                showText = 'Телефон добавлен в базу, спасибо'
+            }
+        } else {
+            css.color = 'red';
+            showText = 'Ошибка скрипта';
+        }
+        this.updatePanel(showText, css);
     };
     this.getData = function () {
         var transferData = {
@@ -67,17 +72,17 @@ function Panel() {
             url: "http://stlist.vergo.space/api/v1/estate/advertisement/search/phone.json",
             data: transferData,
             dataType: "json",
-            success: function (xml) {
-                me.updatePanel(xml, undefined, 'success');
+            success: function (json) {
+                me.processData(json, 'success', 'getData');
             },
-            error: function (xml) {
-                me.updatePanel(xml, undefined, 'error');
+            error: function (json) {
+                me.processData(json, 'error', 'getData');
             }
         });
     };
     this.setData = function (comment) {
         var transferData = {
-            phone: this.phoneBlock.find('strong').text().replace(/\s/ig, '').split('\n'),
+            phones: this.phoneBlock.find('strong').text().replace(/\s/ig, '').split('\n'),
             url: location.href,
             comment: comment || ''
         };
@@ -88,16 +93,15 @@ function Panel() {
             url: "http://stlist.vergo.space/api/v1/estate/advertisement/add.json",
             data: transferData,
             dataType: "json",
-            success: function (xml) {
-                me.updatePanel(xml, undefined, 'success');
+            success: function (json) {
+                me.processData(json, 'success', 'setData');
             },
-            error: function (xml) {
-                me.updatePanel(xml, undefined, 'error');
+            error: function (json) {
+                me.processData(json,  'error', 'setData');
             }
         });
     };
-    this.answers = [];
-    //run
+
     if (this.phoneBlock.size()) {
         this.init();
         this.phoneBlock.find('.spoiler').click();
