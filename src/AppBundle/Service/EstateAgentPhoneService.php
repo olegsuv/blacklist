@@ -68,7 +68,7 @@ class EstateAgentPhoneService
             $deNormalizeListMap[$normalize][] = $phone;
         }
 
-        $exists = $this->doctrine->getRepository('AppBundle:SEstateAgentPhone')->existList($normalizeMap);
+        $exists = $this->doctrine->getRepository('AppBundle:SEstateAgentPhone')->existList(array_values($normalizeMap));
 
         $map = array_fill_keys($phones, false);
 

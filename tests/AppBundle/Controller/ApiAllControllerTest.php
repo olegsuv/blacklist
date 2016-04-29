@@ -201,6 +201,8 @@ class ApiAllControllerTest extends WebTestCase
             ]
         ];
 
+        $this->assertResponseData($expect, $client);
+
         $client->request('GET', '/api/v1/estate/advertisement/search.json', [
             'url' => 'http://somesite.ua/room/23',
             'phones' => []
