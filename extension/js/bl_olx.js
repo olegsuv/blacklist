@@ -43,7 +43,7 @@ function Panel() {
                     showText = 'Найдена информация в базе: ';
                     for (var i = 0; i < json.items.length; i++) {
                         var item = json.items[i];
-                        var tmpText = '\n' + item.phones.join('; ') + '. Комментарий: ' + item.comment;
+                        var tmpText = '<br>' + item.phones.join('; ') + '. Комментарий: ' + item.comment;
                         showText += tmpText;
                     }
                 } else {
@@ -61,8 +61,14 @@ function Panel() {
         this.updatePanel(showText, css);
     };
     this.getData = function () {
+        var $phones = this.phoneBlock.find('strong span');
+        var phones = ['380931112233'];
+        for (var i = 0; i < $phones.length; i++) {
+            phones.push($($phones).eq(i).text().replace(/\s/ig, ''));
+        }
+        this.visitor = phones;
         var transferData = {
-            phone: this.phoneBlock.find('strong').text() , //.replace(/\s/ig, '').split('\n'),
+            phone: 380931112233,
             url: location.href
         };
         var me = this;
