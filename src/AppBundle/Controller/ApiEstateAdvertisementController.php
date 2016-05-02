@@ -59,55 +59,6 @@ class ApiEstateAdvertisementController extends ApiAbstractController
     /**
      * @ApiDoc(
      *    section="estate-advertisement",
-     *    description="Find by phone",
-     *    requirements={
-     *        {"name"="phone", "dataType"="string", "required"=true}
-     *    }
-     * )
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function findPhoneAction(Request $request)
-    {
-        $phone = $request->query->get('phone');
-
-        $phoneService = $this->get('est.phone');
-
-        if ($phoneService->valid($phone)) {
-            return $this->successResponse([
-                'items' => $this->get('est.advertisement')->findByPhone(
-                    $phoneService->normalize($phone)
-                )
-            ]);
-
-        }
-
-        return $this->errorResponse("Invalid phone '$phone'");
-    }
-
-    /**
-     * @ApiDoc(
-     *    section="estate-advertisement",
-     *    description="Find by url",
-     *    parameters={
-     *        {"name"="url", "dataType"="string", "required"=true}
-     *    }
-     * )
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function findUrlAction(Request $request)
-    {
-        $url = $request->query->get('url');
-
-        return $this->successResponse([
-            'items' => $this->get('est.advertisement')->findByUrl($url)
-        ]);
-    }
-
-    /**
-     * @ApiDoc(
-     *    section="estate-advertisement",
      *    description="search",
      *    parameters={
      *        {"name"="url", "dataType"="string", "required"=false},

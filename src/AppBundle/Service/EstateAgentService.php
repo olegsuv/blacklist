@@ -50,20 +50,6 @@ class EstateAgentService
 
     }
 
-    public function findByPhone($phone)
-    {
-        $source = $this->doctrine->getRepository('AppBundle:SAdvertisement')->findByPhones([$phone]);
-
-        return $this->prepareFullData($source);
-    }
-
-    public function findByUrl($url)
-    {
-        $source = $this->doctrine->getRepository('AppBundle:SAdvertisement')->findByUrl($url);
-
-        return $this->prepareFullData($source);
-    }
-
     public function findByContacts($url, array $phones)
     {
         $merge = [];
@@ -107,10 +93,5 @@ class EstateAgentService
         }
 
         return array_values($map);
-    }
-
-    public function existUrl($url)
-    {
-        return $url && $this->doctrine->getRepository('AppBundle:SAdvertisement')->existUrl($url);
     }
 }
