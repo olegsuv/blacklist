@@ -173,12 +173,17 @@ class ApiAllControllerTest extends WebTestCase
 
         $expect = [
             'success' => true,
-            'url' => false,
-            'phones' => [
-                '380630000000' => true,
-                '+38 (063) 000-00-00' => true,
-                '380931111111' => false,
-                '380932222222' => false,
+            'items' => [
+                [
+                    'comment' => 'Missing',
+                    'phones' => ['380630000000', '380631234567'],
+                    'url' => 'http://somesite.ua/room/18',
+                ],
+                [
+                    'comment' => 'Ignore after call',
+                    'phones' => ['380630000000'],
+                    'url' => 'http://somesite.ua/room/23',
+                ],
             ]
         ];
 
@@ -195,9 +200,12 @@ class ApiAllControllerTest extends WebTestCase
 
         $expect = [
             'success' => true,
-            'url' => true,
-            'phones' => [
-                '0932222222' => false
+            'items' => [
+                [
+                    'comment' => 'Ignore after call',
+                    'phones' => ['380630000000'],
+                    'url' => 'http://somesite.ua/room/23',
+                ],
             ]
         ];
 
@@ -212,8 +220,13 @@ class ApiAllControllerTest extends WebTestCase
 
         $expect = [
             'success' => true,
-            'url' => true,
-            'phones' => null
+            'items' => [
+                [
+                    'comment' => 'Ignore after call',
+                    'phones' => ['380630000000'],
+                    'url' => 'http://somesite.ua/room/23',
+                ],
+            ]
         ];
 
         $this->assertResponseData($expect, $client);
