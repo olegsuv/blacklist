@@ -44,15 +44,31 @@ class ApiAllControllerTest extends WebTestCase
         $this->assertResponseSuccess($client);
     }
 
-    public function testSearchPhone()
+    public function testSearchContacts()
     {
         $client = static::createClient();
 
-        $client->request('GET', '/api/v1/estate/advertisement/search/phone.json', [
-            'phone' => '+38 (063) 1 xxx xxx'
+        $this->clear();
+
+        $client->request('GET', '/api/v1/estate/advertisement/search.json', [
+            'url' => 'http://somesite.ua/room/29',
+            'phones' => [
+                '380630000000',
+                '+38 (063) 000-00-00',
+                '380931111111',
+                '380932222222',
+                'some fantasy phone',
+            ]
         ]);
 
-        $this->assertResponseError($client, "Invalid phone '+38 (063) 1 xxx xxx'");
+        $this->assertResponseSuccess($client);
+
+        $expect = [
+            'success' => true,
+            'items' => []
+        ];
+
+        $this->assertResponseData($expect, $client);
     }
 
     public function test()
@@ -60,18 +76,6 @@ class ApiAllControllerTest extends WebTestCase
         $client = static::createClient();
 
         $this->clear();
-
-        $client->request('GET', '/api/v1/estate/advertisement/search/phone.json', [
-            'phone' => '380630000000'
-        ]);
-
-        $this->assertResponseSuccess($client);
-        $expect = [
-            'success' => true,
-            'items' => []
-        ];
-
-        $this->assertResponseData($expect, $client);
 
         $client->request('POST', '/api/v1/estate/advertisement/add.json', [
             'comment' => 'Ignore after call',
@@ -87,76 +91,6 @@ class ApiAllControllerTest extends WebTestCase
         ]);
 
         $this->assertResponseSuccess($client);
-
-        $client->request('GET', '/api/v1/estate/advertisement/search/phone.json', [
-            'phone' => '380630000000'
-        ]);
-
-        $this->assertResponseSuccess($client);
-
-        $expect = [
-            'success' => true,
-            'items' => [
-                [
-                    'comment' => 'Missing',
-                    'phones' => ['380630000000', '380631234567'],
-                    'url' => 'http://somesite.ua/room/18',
-                ],
-                [
-                    'comment' => 'Ignore after call',
-                    'phones' => ['380630000000'],
-                    'url' => 'http://somesite.ua/room/23',
-                ],
-            ]
-        ];
-
-        $this->assertResponseData($expect, $client);
-
-        $client->request('GET', '/api/v1/estate/advertisement/search/phone.json', [
-            'phone' => '+38(063) 000-00-00'
-        ]);
-
-        $this->assertResponseSuccess($client);
-
-        $this->assertResponseData($expect, $client);
-
-        $client->request('GET', '/api/v1/estate/advertisement/search/phone.json', [
-            'phone' => '380631234567'
-        ]);
-
-        $this->assertResponseSuccess($client);
-
-        $expect = [
-            'success' => true,
-            'items' => [
-                [
-                    'comment' => 'Missing',
-                    'phones' => ['380630000000', '380631234567'],
-                    'url' => 'http://somesite.ua/room/18',
-                ],
-            ]
-        ];
-
-        $this->assertResponseData($expect, $client);
-
-        $client->request('GET', '/api/v1/estate/advertisement/search/url.json', [
-            'url' => 'http://somesite.ua/room/23'
-        ]);
-
-        $this->assertResponseSuccess($client);
-
-        $expect = [
-            'success' => true,
-            'items' => [
-                [
-                    'comment' => 'Ignore after call',
-                    'phones' => ['380630000000'],
-                    'url' => 'http://somesite.ua/room/23',
-                ],
-            ]
-        ];
-
-        $this->assertResponseData($expect, $client);
 
         $client->request('GET', '/api/v1/estate/advertisement/search.json', [
             'url' => 'http://somesite.ua/room/29',
