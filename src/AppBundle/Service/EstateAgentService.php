@@ -50,18 +50,19 @@ class EstateAgentService
 
     }
 
-    public function findByPhone($phone)
+    public function findByContacts($url, array $phones)
     {
-        $source = $this->doctrine->getRepository('AppBundle:SAdvertisement')->findByPhone($phone);
+        $merge = [];
 
-        return $this->prepareFullData($source);
-    }
+        if ($url) {
+            $merge = $this->doctrine->getRepository('AppBundle:SAdvertisement')->findByUrl($url);
+        }
 
-    public function findByUrl($url)
-    {
-        $source = $this->doctrine->getRepository('AppBundle:SAdvertisement')->findByUrl($url);
+        if ($phones) {
+            $merge = array_merge($merge, $this->doctrine->getRepository('AppBundle:SAdvertisement')->findByPhones($phones));
+        }
 
-        return $this->prepareFullData($source);
+        return $this->prepareFullData($merge);
     }
 
     public function prepareFullData(array $source)
@@ -92,10 +93,5 @@ class EstateAgentService
         }
 
         return array_values($map);
-    }
-
-    public function existUrl($url)
-    {
-        return $url && $this->doctrine->getRepository('AppBundle:SAdvertisement')->existUrl($url);
     }
 }

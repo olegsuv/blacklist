@@ -10,14 +10,14 @@ namespace AppBundle\Repository;
  */
 class SAdvertisementRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function findByPhone($phone)
+    public function findByPhones(array $phones)
     {
         return $this->createQueryBuilder('a')
             ->select('a.id, a.comment, a.url')
             ->innerJoin('a.phoneLink', 'phoneLink')
             ->innerJoin('phoneLink.phone', 'phone')
-            ->where('phone.phone = :phone')
-            ->setParameter('phone', $phone)
+            ->where('phone.phone IN (:phones)')
+            ->setParameter('phones', $phones)
             ->setMaxResults(10)
             ->orderBy('a.id', 'DESC')
             ->getQuery()
@@ -34,16 +34,5 @@ class SAdvertisementRepository extends \Doctrine\ORM\EntityRepository
             ->orderBy('a.id', 'DESC')
             ->getQuery()
             ->getArrayResult();
-    }
-
-    public function existUrl($url)
-    {
-        return (bool)$this->createQueryBuilder('a')
-            ->select('1')
-            ->where('a.url = :url')
-            ->setParameter('url', $url)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult();
     }
 }
