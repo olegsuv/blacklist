@@ -62,13 +62,13 @@ function Panel() {
     };
     this.getData = function () {
         var $phones = this.phoneBlock.find('strong span');
-        var phones = ['380931112233'];
+        var phones = [];
         for (var i = 0; i < $phones.length; i++) {
             phones.push($($phones).eq(i).text().replace(/\s/ig, ''));
         }
         this.visitor = phones;
         var transferData = {
-            phone: 380931112233,
+            phones: phones,
             url: location.href
         };
         var me = this;
