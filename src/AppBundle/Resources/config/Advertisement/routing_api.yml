@@ -1,24 +1,24 @@
 estate_advertisement_add:
-    path:  add.{_format}
+    path:  add.json
     defaults: { _controller: AppBundle:ApiEstateAdvertisement:create }
     methods: [ 'POST' ]
 
 estate_advertisement_search_phone:
-    path:  search/phone.{_format}
+    path:  search/phone.json
     defaults: { _controller: AppBundle:ApiEstateAdvertisement:findPhone }
     methods: [ 'GET' ]
 
 estate_advertisement_search_url:
-    path:  search/url.{_format}
+    path:  search/url.json
     defaults: { _controller: AppBundle:ApiEstateAdvertisement:findUrl }
     methods: [ 'GET' ]
     
 estate_advertisement_search:
-    path:  search.{_format}
+    path:  search.json
     defaults: { _controller: AppBundle:ApiEstateAdvertisement:search }
     methods: [ 'GET' ]
 
 estate_advertisement_all_phones:
-    path:  phones.{_format}
+    path:  phones.json
     defaults: { _controller: AppBundle:ApiEstatePhone:allPhone }
     methods: [ 'GET' ]
