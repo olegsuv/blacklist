@@ -26,9 +26,5 @@ $kernel->loadClassCache();
 //Request::enableHttpMethodParameterOverride();
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);
-$response->headers->add([
-    'Access-Control-Allow-Origin' => '*',
-    'Access-Control-Allow-Methods' => 'GET, POST'
-]);
 $response->send();
 $kernel->terminate($request, $response);
