@@ -15,5 +15,6 @@ vendor
 !var/SymfonyRequirements.php
 /vendor/
 /web/bundles/
+/app/config/parameters.yml
 
 phpunit-5.3.2.phar

@@ -10,11 +10,17 @@ class ApiEstateAdvertisementController extends ApiAbstractController
 {
     /**
      * @ApiDoc(
-     *    section="estate-advertisement",
-     *    description="Create",
-     *    requirements={
-     *        {"name"="phone", "dataType"="string", "required"=true}
-     *    }
+     *  section="estate-advertisement",
+     *  description="Create",
+     *  requirements={
+     *      {"name"="phones", "dataType"="string", "required"=true, "description"="string or array of strings"},
+     *      {"name"="comment", "dataType"="string", "required"=true},
+     *  },
+     *  parameters={
+     *      {"name"="url", "dataType"="string", "required"=false},
+     *      {"name"="title", "dataType"="string", "required"=false},
+     *      {"name"="description", "dataType"="string", "required"=false},
+     *  }
      * )
      * @param Request $request
      * @return JsonResponse
@@ -34,6 +40,8 @@ class ApiEstateAdvertisementController extends ApiAbstractController
         if (empty($requestPhones)) {
             return $this->errorResponse('Phones required');
         }
+
+        $requestPhones = (array)$requestPhones;
 
         $phoneService = $this->get('est.phone');
         $phones = [];
@@ -62,7 +70,7 @@ class ApiEstateAdvertisementController extends ApiAbstractController
      *    description="search",
      *    parameters={
      *        {"name"="url", "dataType"="string", "required"=false},
-     *        {"name"="phones", "dataType"="array", "required"=false}
+     *        {"name"="phones", "dataType"="array", "required"=false, "description"="string or array of strings"}
      *    }
      * )
      * @param Request $request
@@ -71,7 +79,7 @@ class ApiEstateAdvertisementController extends ApiAbstractController
     public function searchAction(Request $request)
     {
         $url = $request->query->get('url');
-        $requestPhones = $request->query->get('phones');
+        $requestPhones = (array)$request->query->get('phones');
 
         $phoneService = $this->get('est.phone');
 
