@@ -32,10 +32,8 @@ class ApiAbstractController extends Controller
     protected function response($data, $status = JsonResponse::HTTP_OK)
     {
         $response = new JsonResponse($data, $status);
-        $response->headers->add([
-            'Access-Control-Allow-Origin' => '*',
-            'Access-Control-Allow-Methods' => 'GET, POST, HEAD, OPTIONS, PUT',
-        ]);
+        $response->headers->set('Access-Control-Allow-Origin', '*', true);
+        $response->headers->set('Access-Control-Allow-Methods', 'GET, POST, HEAD, OPTIONS, PUT', true);
         return $response;
     }
 
