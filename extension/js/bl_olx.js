@@ -43,8 +43,7 @@ function Panel() {
                     showText = 'Найдена информация в базе: ';
                     for (var i = 0; i < json.items.length; i++) {
                         var item = json.items[i];
-                        var tmpText = '<br>' + item.phones.join('; ') + '. Комментарий: ' + item.comment;
-                        showText += tmpText;
+                        showText += '<br>' + item.phones.join('; ') + '. Комментарий: ' + item.comment;
                     }
                 } else {
                     css.color = 'green';
@@ -66,7 +65,6 @@ function Panel() {
         for (var i = 0; i < $phones.length; i++) {
             phones.push($($phones).eq(i).text().replace(/\s/ig, ''));
         }
-        this.visitor = phones;
         var transferData = {
             phones: phones,
             url: location.href
