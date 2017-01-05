@@ -1,11 +1,16 @@
-// alert('blacklist init');
-
 function Panel() {
     'use strict';
 
     var self = this;
+
+    this.init = function () {
+        this.panel.appendTo('body');
+        this.updatePanel('Panel started');
+        this.getData();
+    };
+
     this.panel = $('<div class="blacklistPanel"></div>');
-    this.phoneBlock = $('.link-phone.big');
+    this.phoneBlock = $('.link-phone');
     this.defaultCSS = {
         position: 'fixed',
         bottom: 0,
@@ -27,12 +32,12 @@ function Panel() {
             self.setData(comment);
         }
     });
+
     this.updatePanel = function (showText, css) {
+        css = css || this.defaultCSS;
         this.panel.css(css).html(showText);
     };
-    this.init = function () {
-        this.panel.appendTo('body');
-    };
+
     this.processData = function (json, status, methodName) {
         var css = this.defaultCSS;
         if (status == "success" && json.success == true) {
@@ -59,6 +64,7 @@ function Panel() {
         }
         this.updatePanel(showText, css);
     };
+
     this.getData = function () {
         var $phones = this.phoneBlock.find('strong span');
         var phones = [];
@@ -69,28 +75,27 @@ function Panel() {
             phones: phones,
             url: location.href
         };
-        var me = this;
         $.ajax({
             crossOrigin: true,
             type: "GET",
-            url: "http://stlist.vergo.space/api/v1/estate/advertisement/search/phone.json",
+            url: "http://stlist.vergo.space/api/v1/estate/advertisement/search.json",
             data: transferData,
             dataType: "json",
             success: function (json) {
-                me.processData(json, 'success', 'getData');
+                self.processData(json, 'success', 'getData');
             },
             error: function (json) {
-                me.processData(json, 'error', 'getData');
+                self.processData(json, 'error', 'getData');
             }
         });
     };
+
     this.setData = function (comment) {
         var transferData = {
             phones: this.phoneBlock.find('strong').text().replace(/\s/ig, '').split('\n'),
             url: location.href,
             comment: comment || ''
         };
-        var me = this;
         $.ajax({
             crossOrigin: true,
             type: "POST",
@@ -98,10 +103,10 @@ function Panel() {
             data: transferData,
             dataType: "json",
             success: function (json) {
-                me.processData(json, 'success', 'setData');
+                self.processData(json, 'success', 'setData');
             },
             error: function (json) {
-                me.processData(json,  'error', 'setData');
+                self.processData(json,  'error', 'setData');
             }
         });
     };
@@ -111,10 +116,10 @@ function Panel() {
         this.phoneBlock.find('.spoiler').click();
     }
 
-    var me = this;
     $('body').bind('adPageShowContact', function () {
-        me.getData();
+        self.getData();
     });
 }
 
 window.blacklist = new Panel();
+window.blacklist.init();

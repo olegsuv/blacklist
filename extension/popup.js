@@ -58,7 +58,7 @@ function getImageUrl(searchTerm, callback, errorCallback) {
   // Google image search - 100 searches per day.
   // https://developers.google.com/image-search/
   var searchUrl = 'https://ajax.googleapis.com/ajax/services/search/images' +
-    '?v=1.0&q=' + encodeURIComponent(searchTerm);
+      '?v=1.0&q=' + encodeURIComponent(searchTerm);
   var x = new XMLHttpRequest();
   x.open('GET', searchUrl);
   // The Google image search API responds with JSON, so let Chrome parse it.
