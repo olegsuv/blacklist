@@ -1,0 +1,36 @@
+AppBundle\Entity\SAdvertisementToPhone:
+    type: entity
+    table: s_advertisement_to_phone
+    repositoryClass: AppBundle\Repository\SAdvertisementToPhoneRepository
+
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+
+    manyToOne:
+        advertisement:
+            targetEntity: AppBundle\Entity\SAdvertisement
+            inversedBy: phoneLink
+            fetch: EXTRA_LAZY
+            joinColumn:
+                name: advertisement_id
+                referencedColumnName: id
+        phone:
+            targetEntity: AppBundle\Entity\SEstateAgentPhone
+            fetch: EXTRA_LAZY
+            joinColumn:
+                name: phone_id
+                referencedColumnName: id
+
+    fields:
+        advertisementId:
+            type: integer
+            column: advertisement_id
+        phoneId:
+            type: integer
+            column: phone_id

@@ -1,0 +1,20 @@
+services:
+    rqs.database.tester:
+        class: AppBundle\Service\DatabaseTesterService
+        arguments:
+            - '@doctrine'
+
+    est.agent.phone:
+        class: AppBundle\Service\EstateAgentPhoneService
+        arguments:
+            - '@doctrine'
+            - '@est.phone'
+
+    est.advertisement:
+        class: AppBundle\Service\EstateAgentService
+        arguments:
+            - '@doctrine'
+            - '@est.agent.phone'
+
+    est.phone:
+        class: AppBundle\Service\PhoneService

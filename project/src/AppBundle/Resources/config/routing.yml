@@ -1,0 +1,3 @@
+main_api:
+    resource: "@AppBundle/Resources/config/routing_api.yml"
+    prefix: /api/v1/

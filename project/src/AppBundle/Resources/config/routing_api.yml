@@ -1,0 +1,3 @@
+main_estate_advertisement_api:
+    resource: "@AppBundle/Resources/config/Advertisement/routing_api.yml"
+    prefix: /estate/advertisement
