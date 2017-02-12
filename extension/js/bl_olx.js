@@ -22,16 +22,11 @@ function Panel() {
         borderTop: '1px solid #ccc',
         zIndex: 1000000
     };
+    this.config = {
+        host: 'http://stlist.vergo.space/api/v1/estate/advertisement/search.json',
+        method: 'get'
+    };
     this.addToBlacklist = $('<input type="button" value="Добавить в базу" class="addToBlacklist">');
-    $(document).on('click', '.addToBlacklist', function () {
-        var comment = prompt('Введите комментарий');
-        if (!comment) {
-            alert('Вы не ввели комментарий, добавления в базу не будет');
-        }
-        else {
-            self.setData(comment);
-        }
-    });
 
     this.updatePanel = function (showText, css) {
         css = css || this.defaultCSS;
@@ -77,8 +72,8 @@ function Panel() {
         };
         $.ajax({
             crossOrigin: true,
-            type: "GET",
-            url: "http://stlist.vergo.space/api/v1/estate/advertisement/search.json",
+            type: this.config.method,
+            url: this.config.host,
             data: transferData,
             dataType: "json",
             success: function (json) {
@@ -115,11 +110,19 @@ function Panel() {
         this.init();
         this.phoneBlock.find('.spoiler').click();
     }
-
-    $('body').bind('adPageShowContact', function () {
-        self.getData();
-    });
 }
 
 window.blacklist = new Panel();
 window.blacklist.init();
+
+$('body').bind('adPageShowContact', window.blacklist.getData());
+
+$(document).on('click', '.addToBlacklist', function () {
+    var comment = prompt('Введите комментарий');
+    if (!comment) {
+        alert('Вы не ввели комментарий, добавления в базу не будет');
+    }
+    else {
+        window.blacklist.setData(comment);
+    }
+});

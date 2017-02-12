@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="d05c672a-9c6c-402d-90ef-6b7bc386f5e8" name="blacklist" url="http://itdate.ftp.ukraine.com.ua">
+        <fileTransfer host="itdate.ftp.ukraine.com.ua" port="21" username="itdate_blacklist">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
