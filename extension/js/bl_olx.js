@@ -3,14 +3,7 @@ function Panel() {
 
     var self = this;
 
-    this.init = function () {
-        this.panel.appendTo('body');
-        this.updatePanel('Panel started');
-        this.getData();
-    };
-
-    this.panel = $('<div class="blacklistPanel"></div>');
-    this.phoneBlock = $('.link-phone');
+    this.panel = $('<div class="blacklistPanel"><div class="message"></div><input type="button" value="Добавить в базу" class="addToBlacklist"></div>');
     this.defaultCSS = {
         position: 'fixed',
         bottom: 0,
@@ -23,45 +16,62 @@ function Panel() {
         zIndex: 1000000
     };
     this.config = {
-        host: 'http://stlist.vergo.space/api/v1/estate/advertisement/search.json',
-        method: 'get'
+        host: 'https://blacklist.gooffline.org.ua',
+        add: '/api/v1/estate/advertisement/add.json',
+        phones: '/api/v1/estate/advertisement/phones.json',
+        search: '/api/v1/estate/advertisement/search.json'
     };
-    this.addToBlacklist = $('<input type="button" value="Добавить в базу" class="addToBlacklist">');
+    this.labels = {
+        notFound: 'Телефона и адреса в базе блеклиста нет, можно звонить',
+        found: 'Найдена информация в базе: ',
+        added: 'Телефон добавлен в базу, спасибо',
+        error: 'Ошибка скрипта',
+        enterComment: 'Введите комментарий',
+        emptyComment: 'Вы не ввели комментарий, добавления в базу не будет'
+    };
 
     this.updatePanel = function (showText, css) {
         css = css || this.defaultCSS;
-        this.panel.css(css).html(showText);
+        this.panel.css(css);
+        this.panel.find('.message').html(showText);
     };
 
     this.processData = function (json, status, methodName) {
+        var showText;
         var css = this.defaultCSS;
-        if (status == "success" && json.success == true) {
-            var showText;
-            if (methodName == 'getData') {
-                if (json.items.length) {
-                    css.color = 'red';
-                    showText = 'Найдена информация в базе: ';
-                    for (var i = 0; i < json.items.length; i++) {
-                        var item = json.items[i];
-                        showText += '<br>' + item.phones.join('; ') + '. Комментарий: ' + item.comment;
-                    }
-                } else {
-                    css.color = 'green';
-                    showText = $('<div/>').html('Телефона и адреса в базе блеклиста нет, можно звонить\t').append(this.addToBlacklist);
+        if (status == 'success' && json.success == true) {
+            this.renderData(json, status, methodName);
+        } else {
+            css.color = 'red';
+            showText = this.labels.error;
+        }
+        this.updatePanel(showText, css);
+    };
+
+    this.renderData = function (json, status, methodName) {
+        var showText;
+        var css = this.defaultCSS;
+        if (methodName == 'getData') {
+            if (json.items.length) {
+                css.color = 'red';
+                showText = this.labels.found;
+                for (var i = 0; i < json.items.length; i++) {
+                    var item = json.items[i];
+                    showText += '<br>' + item.phones.join('; ') + '. Комментарий: ' + item.comment;
                 }
             } else {
                 css.color = 'green';
-                showText = 'Телефон добавлен в базу, спасибо'
+                showText = this.labels.notFound;
             }
         } else {
-            css.color = 'red';
-            showText = 'Ошибка скрипта';
+            css.color = 'green';
+            showText = this.labels.added;
         }
         this.updatePanel(showText, css);
     };
 
     this.getData = function () {
-        var $phones = this.phoneBlock.find('strong span');
+        var $phones = this.phoneBlock.find('strong');
         var phones = [];
         for (var i = 0; i < $phones.length; i++) {
             phones.push($($phones).eq(i).text().replace(/\s/ig, ''));
@@ -72,10 +82,10 @@ function Panel() {
         };
         $.ajax({
             crossOrigin: true,
-            type: this.config.method,
-            url: this.config.host,
+            type: 'get',
+            url: this.config.host + this.config.search,
             data: transferData,
-            dataType: "json",
+            dataType: 'json',
             success: function (json) {
                 self.processData(json, 'success', 'getData');
             },
@@ -93,10 +103,10 @@ function Panel() {
         };
         $.ajax({
             crossOrigin: true,
-            type: "POST",
-            url: "http://stlist.vergo.space/api/v1/estate/advertisement/add.json",
+            type: 'post',
+            url: this.config.host + this.config.add,
             data: transferData,
-            dataType: "json",
+            dataType: 'json',
             success: function (json) {
                 self.processData(json, 'success', 'setData');
             },
@@ -106,23 +116,32 @@ function Panel() {
         });
     };
 
-    if (this.phoneBlock.size()) {
-        this.init();
+    this.addToBlacklist = function () {
+        var comment = prompt(this.labels.enterComment);
+        if (!comment) {
+            alert(this.labels.emptyComment);
+        }
+        else {
+            this.setData(comment);
+        }
+    };
+
+    this.init = function () {
+        this.panel.css(this.defaultCSS).appendTo('body');
+        this.phoneBlock = $('.contact-button.link-phone');
         this.phoneBlock.find('.spoiler').click();
-    }
+
+    };
+
+    this.init();
 }
 
 window.blacklist = new Panel();
-window.blacklist.init();
-
-$('body').bind('adPageShowContact', window.blacklist.getData());
 
 $(document).on('click', '.addToBlacklist', function () {
-    var comment = prompt('Введите комментарий');
-    if (!comment) {
-        alert('Вы не ввели комментарий, добавления в базу не будет');
-    }
-    else {
-        window.blacklist.setData(comment);
-    }
+    window.blacklist.addToBlacklist();
+});
+
+$('body').bind('adPageShowContact', function () {
+    window.blacklist.getData();
 });
