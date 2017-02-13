@@ -3,6 +3,9 @@
     "name": "Rieltor Blacklist",
     "description": "This extension shows status of article author searched in our database",
     "version": "1.7",
+    "background": [
+
+    ],
     "browser_action": {
         "default_icon": "images/ic_cached_black_24dp_1x.png"
     },
@@ -17,15 +20,13 @@
                 "https://www.olx.ua/*"
             ],
             "js": [
-                "vendors/jquery.min.js",
-                "vendors/jquery.tmpl.min.js",
                 "js/contentScript.js"
             ]
         }
     ],
     "web_accessible_resources": [
         "js/*",
-        "vendors/*",
+        "node_modules/*",
         "images/*"
     ]
 }

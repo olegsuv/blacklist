@@ -60,7 +60,7 @@ function Panel() {
     };
 
     this.getTransferData = function (comment) {
-        var $phones = this.phoneBlock.find('strong'), phones = [];
+        var $phones = this.phoneBlock.find('strong span'), phones = [];
         for (var i = 0; i < $phones.length; i++) {
             phones.push($($phones).eq(i).text().replace(/\s/ig, ''));
         }
