@@ -3,7 +3,10 @@ function Panel() {
 
     var self = this;
 
+    //TODO move to template
     this.panel = $('<div class="blacklistPanel"><div class="message"></div><input type="button" value="Добавить в базу" class="addToBlacklist"></div>');
+
+    //TODO move to styles
     this.defaultCSS = {
         position: 'fixed',
         bottom: 0,
@@ -15,6 +18,7 @@ function Panel() {
         borderTop: '1px solid #ccc',
         zIndex: 1000000
     };
+
     this.config = {
         host: 'https://blacklist.gooffline.org.ua',
         add: '/api/v1/estate/advertisement/add.json',
@@ -36,21 +40,17 @@ function Panel() {
         this.panel.find('.message').html(showText);
     };
 
-    this.processData = function (json, status, methodName) {
-        var showText;
+    this.renderError = function (json) {
         var css = this.defaultCSS;
-        if (status == 'success' && json.success == true) {
-            this.renderData(json, status, methodName);
-        } else {
-            css.color = 'red';
-            showText = this.labels.error;
-        }
+        css.color = 'red';
+        var showText = this.labels.error + json;
         this.updatePanel(showText, css);
     };
 
-    this.renderData = function (json, status, methodName) {
+    this.renderData = function (json, methodName) {
         var showText;
         var css = this.defaultCSS;
+
         if (methodName == 'getData') {
             if (json.items.length) {
                 css.color = 'red';
@@ -63,66 +63,70 @@ function Panel() {
                 css.color = 'green';
                 showText = this.labels.notFound;
             }
-        } else {
+        }
+
+        if (methodName == 'setData')  {
             css.color = 'green';
             showText = this.labels.added;
+            this.panel.find('.addToBlacklist').hide();
         }
+
         this.updatePanel(showText, css);
     };
 
-    this.getData = function () {
-        var $phones = this.phoneBlock.find('strong');
-        var phones = [];
+    this.getTransferData = function (comment) {
+        var $phones = this.phoneBlock.find('strong'), phones = [];
         for (var i = 0; i < $phones.length; i++) {
             phones.push($($phones).eq(i).text().replace(/\s/ig, ''));
         }
-        var transferData = {
+        return {
             phones: phones,
-            url: location.href
+            url: location.pathname,
+            comment: comment || null
         };
+    };
+
+    this.getData = function () {
         $.ajax({
             crossOrigin: true,
             type: 'get',
             url: this.config.host + this.config.search,
-            data: transferData,
+            data: this.getTransferData(),
             dataType: 'json',
             success: function (json) {
-                self.processData(json, 'success', 'getData');
+                self.renderData(json, 'getData');
             },
             error: function (json) {
-                self.processData(json, 'error', 'getData');
+                self.renderError(json, 'getData');
             }
         });
     };
 
     this.setData = function (comment) {
-        var transferData = {
-            phones: this.phoneBlock.find('strong').text().replace(/\s/ig, '').split('\n'),
-            url: location.href,
-            comment: comment || ''
-        };
+        this.panel.find('.addToBlacklist').attr('disabled', true).val('Добавляется...');
         $.ajax({
             crossOrigin: true,
             type: 'post',
             url: this.config.host + this.config.add,
-            data: transferData,
+            data: this.getTransferData(comment),
             dataType: 'json',
             success: function (json) {
-                self.processData(json, 'success', 'setData');
+                self.renderData(json, 'setData');
             },
             error: function (json) {
-                self.processData(json,  'error', 'setData');
+                self.renderError(json, 'setData');
             }
         });
     };
 
+    //TODO replace to html form
     this.addToBlacklist = function () {
         var comment = prompt(this.labels.enterComment);
-        if (!comment) {
-            alert(this.labels.emptyComment);
+        if (comment) {
+            this.setData(comment);
         }
         else {
-            this.setData(comment);
+            alert(this.labels.emptyComment);
         }
     };
 
@@ -130,7 +134,6 @@ function Panel() {
         this.panel.css(this.defaultCSS).appendTo('body');
         this.phoneBlock = $('.contact-button.link-phone');
         this.phoneBlock.find('.spoiler').click();
-
     };
 
     this.init();
