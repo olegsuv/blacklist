@@ -2,13 +2,14 @@
     "manifest_version": 2,
     "name": "Rieltor Blacklist",
     "description": "This extension shows status of article author searched in our database",
-    "version": "1.5",
+    "version": "1.7",
     "browser_action": {
         "default_icon": "images/ic_cached_black_24dp_1x.png"
     },
     "permissions": [
         "activeTab",
-        "tabs"
+        "https://blacklist.gooffline.org.ua/*",
+        "https://www.olx.ua/*"
     ],
     "content_scripts": [
         {
@@ -16,13 +17,15 @@
                 "https://www.olx.ua/*"
             ],
             "js": [
-                "jquery.min.js",
-                "contentScript.js"
+                "vendors/jquery.min.js",
+                "vendors/jquery.tmpl.min.js",
+                "js/contentScript.js"
             ]
         }
     ],
     "web_accessible_resources": [
         "js/*",
+        "vendors/*",
         "images/*"
     ]
 }
