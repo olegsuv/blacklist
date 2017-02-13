@@ -3,28 +3,20 @@ function Panel() {
 
     var self = this;
 
-    //TODO move to template
-    this.panel = $('<div class="blacklistPanel"><div class="message"></div><input type="button" value="Добавить в базу" class="addToBlacklist"></div>');
-
-    //TODO move to styles
-    this.defaultCSS = {
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        width: '100%',
-        lineHeight: '40px',
-        background: 'white',
-        color: 'black',
-        borderTop: '1px solid #ccc',
-        zIndex: 1000000
+    this.init = function () {
+        this.phoneBlock = $();
+        this.phoneBlock.find('.spoiler').click();
+        alert('init');
     };
 
     this.config = {
+        phoneBlockSelector: '.contact-button.link-phone',
         host: 'https://blacklist.gooffline.org.ua',
         add: '/api/v1/estate/advertisement/add.json',
         phones: '/api/v1/estate/advertisement/phones.json',
         search: '/api/v1/estate/advertisement/search.json'
     };
+
     this.labels = {
         notFound: 'Телефона и адреса в базе блеклиста нет, можно звонить',
         found: 'Найдена информация в базе: ',
@@ -34,44 +26,36 @@ function Panel() {
         emptyComment: 'Вы не ввели комментарий, добавления в базу не будет'
     };
 
-    this.updatePanel = function (showText, css) {
-        css = css || this.defaultCSS;
-        this.panel.css(css);
-        this.panel.find('.message').html(showText);
+    this.updatePanel = function (text) {
+        console.log('updatePanel', text);
+        $('.message').html(text);
     };
 
     this.renderError = function (json) {
-        var css = this.defaultCSS;
-        css.color = 'red';
-        var showText = this.labels.error + json;
-        this.updatePanel(showText, css);
+        this.updatePanel(this.labels.error + json);
     };
 
     this.renderData = function (json, methodName) {
-        var showText;
-        var css = this.defaultCSS;
+        var text;
 
-        if (methodName == 'getData') {
+        if (methodName === 'getData') {
             if (json.items.length) {
-                css.color = 'red';
-                showText = this.labels.found;
+                text = this.labels.found;
                 for (var i = 0; i < json.items.length; i++) {
                     var item = json.items[i];
-                    showText += '<br>' + item.phones.join('; ') + '. Комментарий: ' + item.comment;
+                    text += '<br>' + item.phones.join('; ') + '. Комментарий: ' + item.comment;
                 }
             } else {
-                css.color = 'green';
-                showText = this.labels.notFound;
+                text = this.labels.notFound;
             }
         }
 
-        if (methodName == 'setData')  {
-            css.color = 'green';
-            showText = this.labels.added;
-            this.panel.find('.addToBlacklist').hide();
+        if (methodName === 'setData')  {
+            text = this.labels.added;
+            $('.addToBlacklist').hide();
         }
 
-        this.updatePanel(showText, css);
+        this.updatePanel(text);
     };
 
     this.getTransferData = function (comment) {
@@ -103,7 +87,7 @@ function Panel() {
     };
 
     this.setData = function (comment) {
-        this.panel.find('.addToBlacklist').attr('disabled', true).val('Добавляется...');
+        $('.addToBlacklist').attr('disabled', true).val('Добавляется...');
         $.ajax({
             crossOrigin: true,
             type: 'post',
@@ -128,12 +112,6 @@ function Panel() {
         else {
             alert(this.labels.emptyComment);
         }
-    };
-
-    this.init = function () {
-        this.panel.css(this.defaultCSS).appendTo('body');
-        this.phoneBlock = $('.contact-button.link-phone');
-        this.phoneBlock.find('.spoiler').click();
     };
 
     this.init();

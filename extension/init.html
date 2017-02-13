@@ -5,20 +5,24 @@
  value "popup.html".
  -->
 <html>
-  <head>
+<head>
     <title>Getting Started Extension's Popup</title>
     <style>
-      body {
-        font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
-        font-size: 100%;
-      }
-      #status {
-        /* avoid an excessively wide status text */
-        white-space: pre;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        width: 400px;
-      }
+        body {
+            font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+            font-size: 100%;
+        }
+
+        .container {
+            white-space: pre;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            width: 400px;
+        }
+
+        .message {
+
+        }
     </style>
 
     <!--
@@ -28,9 +32,14 @@
       - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
      -->
     <script src="js/bl_olx.js"></script>
-  </head>
-  <body>
-    <div id="status">Default status</div>
-  </body>
+</head>
+<body>
+<div class="container">
+    <div class="blacklistPanel">
+        <div class="message"></div>
+        <input type="button" value="Добавить в базу" class="addToBlacklist">
+    </div>
+</div>
+</body>
 </html>
 
