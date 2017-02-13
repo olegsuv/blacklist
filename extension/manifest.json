@@ -1,28 +1,22 @@
 {
-  "manifest_version": 2,
-  "name": "Rieltor Blacklist",
-  "description": "This extension shows status of article author searched in our database",
-  "version": "2.0",
-  "browser_action": {
-    "default_icon": "images/ic_cached_black_48dp_1x.png",
-    "default_popup": "init.html"
-  },
-  "permissions": [
-    "activeTab",
-    "tabs"
-  ],
-  "content_scripts": [
-    {
-      "matches": [
+    "manifest_version": 2,
+    "name": "Rieltor Blacklist",
+    "description": "This extension shows status of article author searched in our database",
+    "version": "2.0",
+    "browser_action": {
+        "default_icon": "images/ic_cached_black_48dp_1x.png",
+        "default_popup": "init.html"
+    },
+    "background": {
+        "scripts": ["vendors/jquery-3.1.1.slim.min.js", "inject.js"]
+    },
+    "permissions": [
+        "activeTab",
+        "tabs",
+        "https://blacklist.gooffline.org.ua/*",
         "https://www.olx.ua/*"
-      ],
-      "js": [
-        "jquery.min.js",
-        "contentScript.js"
-      ]
-    }
-  ],
-  "web_accessible_resources": [
-    "js/*"
-  ]
+    ],
+    "web_accessible_resources": [
+        "js/*"
+    ]
 }

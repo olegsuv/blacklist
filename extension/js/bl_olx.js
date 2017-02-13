@@ -4,17 +4,22 @@ function Panel() {
     var self = this;
 
     this.init = function () {
-        this.phoneBlock = $();
-        this.phoneBlock.find('.spoiler').click();
-        alert('init');
+        this.phoneBlock = $(this.selectors.phoneBlock);
+        this.phoneBlock.find(this.selectors.getPhone).click();
     };
 
     this.config = {
-        phoneBlockSelector: '.contact-button.link-phone',
         host: 'https://blacklist.gooffline.org.ua',
         add: '/api/v1/estate/advertisement/add.json',
         phones: '/api/v1/estate/advertisement/phones.json',
         search: '/api/v1/estate/advertisement/search.json'
+    };
+
+    this.selectors = {
+        phoneBlock: '.contact-button.link-phone',
+        getPhone: '.spoiler',
+        message: '.message',
+        addToBlacklist: '.addToBlacklist'
     };
 
     this.labels = {
@@ -27,8 +32,7 @@ function Panel() {
     };
 
     this.updatePanel = function (text) {
-        console.log('updatePanel', text);
-        $('.message').html(text);
+        $(this.selectors.message).html(text);
     };
 
     this.renderError = function (json) {
@@ -87,7 +91,7 @@ function Panel() {
     };
 
     this.setData = function (comment) {
-        $('.addToBlacklist').attr('disabled', true).val('Добавляется...');
+        $(this.selectors.addToBlacklist).attr('disabled', true).val('Добавляется...');
         $.ajax({
             crossOrigin: true,
             type: 'post',
@@ -119,7 +123,7 @@ function Panel() {
 
 window.blacklist = new Panel();
 
-$(document).on('click', '.addToBlacklist', function () {
+$(document).on('click', window.blacklist.selectors.addToBlacklist, function () {
     window.blacklist.addToBlacklist();
 });
 
