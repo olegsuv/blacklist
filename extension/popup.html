@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <script src="node_modules/jsrender/jsrender.min.js"></script>
@@ -28,7 +29,7 @@
 
         #result {
             max-width: 600px;
-            min-width: 300px;
+            min-width: 450px;
             min-height: 60px;
             max-height: 300px;
             overflow-y: auto;
@@ -49,16 +50,16 @@
     {{/if}}
 
     <div class="input-group">
-        <input class="form-control" placeholder="Введите текст жалобы">
+        <input class="form-control" placeholder="{{:placeholder}}">
         <div class="input-group-btn">
-            <button type="submit" class="btn btn-primary js-add">Пожаловаться</button>
+            <button type="submit" class="btn btn-primary js-add">{{:clickToAction}}</button>
         </div>
     </div>
 
-    {{for items}}
+    {{for content.items}}
     <div class="panel panel-warning">
         <div class="panel-heading">
-            <h3 class="panel-title"><strong>{{:phones}}</strong> from <em>{{:url}}</em></h3>
+            <h3 class="panel-title"><strong>{{:phones}}</strong> <em>[{{:url}}]</em></h3>
         </div>
         <div class="panel-body">
             {{:comment}}
@@ -69,7 +70,7 @@
     </div>
 </script>
 
-<script src="panel.js"></script>
+<script src="js/popup.js"></script>
 
 </body>
 </html>
