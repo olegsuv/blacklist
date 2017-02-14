@@ -2,14 +2,42 @@
  * Created by Oleg on 14.02.2017.
  */
 
-function getData(phones) {
+function getTransferData(comment) {
+    var dataObject = {
+        phones: data.phones,
+        url: data.url
+    };
+    if (comment) {
+        dataObject.comment = comment;
+    }
+    return dataObject;
+}
+
+function setData(comment) {
+    $.ajax({
+        crossOrigin: true,
+        type: 'post',
+        url: config.host + config.add,
+        data: getTransferData(comment),
+        dataType: 'json',
+        success: function (json) {
+            self.renderData(json, 'setData');
+        },
+        error: function (json) {
+            self.renderError(json, 'setData');
+        }
+    });
+}
+
+function getData(dataObject) {
+    data.phones = dataObject.phones;
+    data.url = dataObject.url;
+
     $.ajax({
         crossOrigin: true,
         type: 'get',
         url: config.host + config.search,
-        data: {
-            phones: phones
-        },
+        data: getTransferData(),
         dataType: 'json',
         success: function (receivedData) {
             processData(receivedData);
@@ -62,44 +90,21 @@ var data = {
     status: 'info',
     placeholder: labels.placeholder,
     clickToAction: labels.clickToAction,
-    content: {}
-}, phones = [];
+    content: {},
+    phones: [],
+    url: ''
+};
 
-/*function getTransferData(comment) {
- return {
- phones: phones,
- url: location.pathname,
- comment: comment || null
- };
- }
-
- var setData = function (comment) {
- $.ajax({
- crossOrigin: true,
- type: 'post',
- url: config.host + config.add,
- data: getTransferData(),
- dataType: 'json',
- success: function (json) {
- data.status = "success";
- data.items.push(sendingData);
- renderData();
- },
- error: function (json) {
- self.renderError(json, 'setData');
- }
- });
- };
-
- $('.js-add').click(function (element) {
- element.currentTarget.prop('disabled', true);
- chrome.tabs.getSelected(null, function (tab) {
- chrome.tabs.sendRequest(tab.id, {method: 'getPhone'}, function (response) {
- alert(response.data);
- });
- });
- // setData();
- });*/
+$('.js-claim-button').click(function (element) {
+    element.currentTarget.prop('disabled', true);
+    var comment = $('.js-claim-text').val();
+    if (comment) {
+        setData(comment);
+    }
+    else {
+        alert(labels.emptyComment);
+    }
+});
 
 // Once the DOM is ready...
 window.addEventListener('DOMContentLoaded', function () {
