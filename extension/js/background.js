@@ -2,14 +2,12 @@
  * Created by Oleg on 14.02.2017.
  */
 
-// A function to use as callback
-function doStuffWithDom(domContent) {
-    console.log('I received the following DOM content:\n' + domContent);
-    alert(domContent);
-}
+chrome.runtime.onMessage.addListener(function (tab) {
+    alert('background chrome.runtime.onMessage 1');
+    console.log('background chrome.runtime.onMessage 1', tab);
+});
 
-// When the browser-action button is clicked...
-chrome.browserAction.getPopup.addListener(function (tab) {
-    alert('clicked');
-    chrome.tabs.sendMessage(tab.id, {text: 'report_back'}, doStuffWithDom);
+chrome.runtime.onMessage.addListener(function (msg, sender) {
+    alert('background chrome.runtime.onMessage 2');
+    console.log('background chrome.runtime.onMessage 2', msg, sender, sender.tab.id);
 });

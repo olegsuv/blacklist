@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "Rieltor Blacklist",
     "description": "This extension shows status of article author searched in our database",
-    "version": "1.9",
+    "version": "1.10",
     "background": {
         "persistent": false,
         "scripts": [
@@ -24,7 +24,7 @@
                 "https://www.olx.ua/*"
             ],
             "js": [
-                "js/inject_olx.js",
+                "node_modules/jquery/dist/jquery.min.js",
                 "js/content.js"
             ]
         }

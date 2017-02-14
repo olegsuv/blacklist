@@ -2,14 +2,26 @@
  * Created by Oleg on 14.02.2017.
  */
 
-// Listen for messages
-chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
-    // If the received message has the expected format...
-    if (msg.text === 'report_back') {
-        var phones = $('.contact-button.link-phone strong span').map(function () {
-            return $(this).text()
-        });
+function grabPhones() {
+    return $(selectors.phoneBlock).find(selectors.textPhone).map(function () {
+        return $(this).text();
+    });
+}
 
-        sendResponse(phones);
-    }
+var selectors = {
+    phoneBlock: '.contact-button.link-phone',
+    getPhone: '.spoiler',
+    textPhone: 'strong span',
+    message: '.message',
+    addToBlacklist: '.addToBlacklist'
+};
+
+// chrome.runtime.sendMessage(grabPhones());
+
+// lets get phones
+$(selectors.phoneBlock).find(selectors.getPhone).click();
+
+// Listen for messages from the popup
+chrome.runtime.onMessage.addListener(function (msg, sender, response) {
+    response(grabPhones());
 });
