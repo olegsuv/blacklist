@@ -33,9 +33,15 @@ function setData(comment) {
 }
 
 function getData(dataObject) {
-    if (dataObject) {
+    console.log('getData', dataObject);
+
+    if (dataObject && dataObject.phones) {
         data.phones = dataObject.phones;
         data.url = dataObject.url;
+    } else {
+        console.log('No data', dataObject);
+        chrome.browserAction.setIcon({path: icons.warning});
+        return false;
     }
 
     $.ajax({
@@ -58,9 +64,11 @@ function processData(receivedData) {
     if (receivedData.items.length) {
         data.message = labels.found + receivedData.items.length;
         data.status = 'danger';
+        chrome.browserAction.setIcon({path: icons.error});
     } else {
         data.message = labels.notFound + data.phones.join(', ');
         data.status = 'success';
+        chrome.browserAction.setIcon({path: icons.checked});
     }
     renderData(data);
 }
@@ -69,8 +77,14 @@ function renderData(data) {
     $(selectors.renderElement).html($.templates(selectors.templateId).render(data));
 }
 
+const icons = {
+    error: 'images/ic_error_black_24dp_1x.png',
+    checked: 'images/ic_check_black_24dp_1x.png',
+    warning: 'images/ic_warning_black_24dp_1x.png'
+};
+
 const labels = {
-    notFound: 'Жалобы не найдены, можно звонить: ',
+    notFound: 'Жалоб еще не было, можно звонить: ',
     found: 'Найдены жалобы: ',
     adding: 'Добавляется...',
     added: 'Телефон добавлен в базу, спасибо',
@@ -104,7 +118,7 @@ var data = {
     status: 'info'
 };
 
-$(document.body).on('click', selectors.addButton, function() {
+$(document.body).on('click', selectors.addButton, function () {
     var comment = $(selectors.addText).val();
     if (comment) {
         $(selectors.addButton).prop('disabled', true);
@@ -117,6 +131,7 @@ $(document.body).on('click', selectors.addButton, function() {
 
 // Once the DOM is ready...
 window.addEventListener('DOMContentLoaded', function () {
+    console.log('DOMContentLoaded');
     chrome.tabs.query({
         active: true,
         currentWindow: true

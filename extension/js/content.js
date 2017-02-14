@@ -3,7 +3,10 @@
  */
 
 function grabPhones() {
-    var phonesDom = $(selectors.phoneBlock).find(selectors.textPhone);
+    var phonesDom = $(selectors.phoneBlock).find(selectors.textPhones);
+    if (!phonesDom.length) {
+        phonesDom = $(selectors.phoneBlock).find(selectors.textOnePhone);
+    }
     var phones = [];
     for (var i = 0; i < phonesDom.length; i++) {
         var currentPhone = $(phonesDom).eq(i).text();
@@ -23,7 +26,8 @@ function sendData() {
 var selectors = {
     phoneBlock: '.contact-button.link-phone',
     getPhone: '.spoiler',
-    textPhone: 'strong span, strong.xx-large'
+    textOnePhone: 'strong',
+    textPhones: 'strong span'
 };
 
 // lets get phones
