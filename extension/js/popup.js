@@ -139,6 +139,3 @@ window.addEventListener('DOMContentLoaded', function () {
         chrome.tabs.sendMessage(tabs[0].id, {}, getData);
     });
 });
-
-// Lets run render by default
-renderData(data);
