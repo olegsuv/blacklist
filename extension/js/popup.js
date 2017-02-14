@@ -33,8 +33,6 @@ function setData(comment) {
 }
 
 function getData(dataObject) {
-    console.log(dataObject);
-
     if (dataObject) {
         data.phones = dataObject.phones;
         data.url = dataObject.url;
@@ -106,7 +104,7 @@ var data = {
     status: 'info'
 };
 
-$(document.body).on('click', selectors.addButton, function(event, element) {
+$(document.body).on('click', selectors.addButton, function() {
     var comment = $(selectors.addText).val();
     if (comment) {
         $(selectors.addButton).prop('disabled', true);
