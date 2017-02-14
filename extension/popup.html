@@ -17,12 +17,6 @@
             border-top: 1px solid #ccc;
         }
 
-        .panel-title {
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            overflow: hidden;
-        }
-
         .input-group {
             margin-bottom: 15px;
         }
@@ -43,29 +37,39 @@
 <script id="panelView" type="text/x-jsrender">
     <div class="container">
 
-    {{if message}}
-    <div class="alert alert-{{:status}}" role="alert">
-        {{:message}}
-    </div>
+    {{if phones.length }}
+
+        {{if message}}
+        <div class="alert alert-{{:status}}" role="alert">
+            {{:message}}
+        </div>
+        {{/if}}
+
+        {{for content.items}}
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h3 class="panel-title"><strong>{{:phones}}</strong> <em>[{{:url}}]</em></h3>
+            </div>
+            <div class="panel-body">
+                {{:comment}}
+            </div>
+        </div>
+        {{/for}}
+
+        <div class="input-group">
+            <input class="form-control js-claim-text" placeholder="{{:labels.placeholder}}">
+            <div class="input-group-btn">
+                <button type="submit" class="btn btn-primary js-claim-button">{{:labels.clickToAction}}</button>
+            </div>
+        </div>
+
+    {{else}}
+
+        <div class="alert alert-danger" role="alert">
+            {{:labels.noPhones}}
+        </div>
+
     {{/if}}
-
-    <div class="input-group">
-        <input class="form-control js-claim-text" placeholder="{{:placeholder}}">
-        <div class="input-group-btn">
-            <button type="submit" class="btn btn-primary js-claim-button">{{:clickToAction}}</button>
-        </div>
-    </div>
-
-    {{for content.items}}
-    <div class="panel panel-warning">
-        <div class="panel-heading">
-            <h3 class="panel-title"><strong>{{:phones}}</strong> <em>[{{:url}}]</em></h3>
-        </div>
-        <div class="panel-body">
-            {{:comment}}
-        </div>
-    </div>
-    {{/for}}
 
     </div>
 </script>

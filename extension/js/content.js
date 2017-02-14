@@ -23,7 +23,7 @@ function sendData() {
 var selectors = {
     phoneBlock: '.contact-button.link-phone',
     getPhone: '.spoiler',
-    textPhone: 'strong span'
+    textPhone: 'strong span, strong.xx-large'
 };
 
 // lets get phones

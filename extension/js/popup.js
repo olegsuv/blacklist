@@ -21,17 +21,24 @@ function setData(comment) {
         data: getTransferData(comment),
         dataType: 'json',
         success: function (json) {
-            self.renderData(json, 'setData');
+            console.log('success', json);
+            data.content.items.push(getTransferData(comment));
+            $(selectors.addButton).prop('disabled', false).val('');
+            renderData(data);
         },
         error: function (json) {
-            self.renderError(json, 'setData');
+            console.log('error', json);
         }
     });
 }
 
 function getData(dataObject) {
-    data.phones = dataObject.phones;
-    data.url = dataObject.url;
+    console.log(dataObject);
+
+    if (dataObject) {
+        data.phones = dataObject.phones;
+        data.url = dataObject.url;
+    }
 
     $.ajax({
         crossOrigin: true,
@@ -54,18 +61,18 @@ function processData(receivedData) {
         data.message = labels.found + receivedData.items.length;
         data.status = 'danger';
     } else {
-        data.message = labels.notFound;
+        data.message = labels.notFound + data.phones.join(', ');
         data.status = 'success';
     }
     renderData(data);
 }
 
 function renderData(data) {
-    $("#result").html($.templates("#panelView").render(data));
+    $(selectors.renderElement).html($.templates(selectors.templateId).render(data));
 }
 
 const labels = {
-    notFound: 'Жалобы не найдены, можно звонить',
+    notFound: 'Жалобы не найдены, можно звонить: ',
     found: 'Найдены жалобы: ',
     adding: 'Добавляется...',
     added: 'Телефон добавлен в базу, спасибо',
@@ -74,7 +81,8 @@ const labels = {
     emptyComment: 'Вы не ввели комментарий, добавления в базу не будет',
     pending: 'Загрузка данных...',
     placeholder: 'Введите текст жалобы',
-    clickToAction: 'Пожаловаться'
+    clickToAction: 'Пожаловаться',
+    noPhones: 'Телефонные номера не загружены'
 };
 
 const config = {
@@ -85,20 +93,23 @@ const config = {
     siteEvent: 'adPageShowContact'
 };
 
-var data = {
-    message: labels.pending,
-    status: 'info',
-    placeholder: labels.placeholder,
-    clickToAction: labels.clickToAction,
-    content: {},
-    phones: [],
-    url: ''
+const selectors = {
+    addButton: '.js-claim-button',
+    addText: '.js-claim-text',
+    renderElement: '#result',
+    templateId: '#panelView'
 };
 
-$('.js-claim-button').click(function (element) {
-    element.currentTarget.prop('disabled', true);
-    var comment = $('.js-claim-text').val();
+var data = {
+    labels: labels,
+    message: labels.pending,
+    status: 'info'
+};
+
+$(document.body).on('click', selectors.addButton, function(event, element) {
+    var comment = $(selectors.addText).val();
     if (comment) {
+        $(selectors.addButton).prop('disabled', true);
         setData(comment);
     }
     else {
