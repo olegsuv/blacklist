@@ -3,9 +3,14 @@
  */
 
 function grabPhones() {
-    return $(selectors.phoneBlock).find(selectors.textPhone).map(function () {
-        return $(this).text();
-    });
+    var phonesDom = $(selectors.phoneBlock).find(selectors.textPhone);
+    var phones = [];
+    for (var i = 0; i < phonesDom.length; i++) {
+        var currentPhone = $(phonesDom).eq(i).text();
+        currentPhone = '38' + currentPhone.replace(/\s/ig, '');
+        phones.push(currentPhone);
+    }
+    return phones;
 }
 
 var selectors = {
