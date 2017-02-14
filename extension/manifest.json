@@ -2,12 +2,13 @@
     "manifest_version": 2,
     "name": "Rieltor Blacklist",
     "description": "This extension shows status of article author searched in our database",
-    "version": "1.7",
+    "version": "1.8",
     "background": [
 
     ],
     "browser_action": {
-        "default_icon": "images/ic_cached_black_24dp_1x.png"
+        "default_icon": "images/ic_cached_black_24dp_1x.png",
+        "default_popup": "panel.html"
     },
     "permissions": [
         "activeTab",
@@ -28,5 +29,6 @@
         "js/*",
         "node_modules/*",
         "images/*"
-    ]
+    ],
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }

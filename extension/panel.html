@@ -5,22 +5,15 @@
     <script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
     <script src="node_modules/jsrender/jsrender.min.js"></script>
     <style>
-        .blacklistPanel {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            width: 100%;
-
-            background: white;
-            color: black;
-            border-top: 1px solid #ccc;
+        .container {
+            width: auto;
             padding-top: 15px;
         }
 
-        .form-horizontal {
-            padding-top: 8px;
+        .blacklistPanel {
+            background: white;
+            color: black;
+            border-top: 1px solid #ccc;
         }
 
         .panel-title {
@@ -28,64 +21,55 @@
             text-overflow: ellipsis;
             overflow: hidden;
         }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        #result {
+            max-width: 400px;
+            min-width: 200px;
+            min-height: 40px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
     </style>
 </head>
 <body>
 
+<div class="blacklistPanel" id="result"></div>
+
 <script id="panelView" type="text/x-jsrender">
-
     <div class="container">
-        <div class="row">
-            <div class="col-sm-6">
-                {{if message}}
-                <div class="alert alert-success" role="alert">
-                    {{:message}}
-                </div>
-                {{/if}}
 
-                {{for items}}
-                <div class="panel panel-warning">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><strong>{{:phones}}</strong> from <em>{{:url}}</em></h3>
-                    </div>
-                    <div class="panel-body">
-                        {{:comment}}
-                    </div>
-                </div>
-                {{/for}}
-            </div>
-            <div class="col-sm-6">
-                <form class="form-horizontal">
-                    <div class="form-group">
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="comment" placeholder="Текст жалобы">
-                        </div>
-                        <div class="col-sm-2">
-                            <button type="submit" class="btn btn-primary">Пожаловаться</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+    {{if message}}
+    <div class="alert alert-{{:status}}" role="alert">
+        {{:message}}
+    </div>
+    {{/if}}
+
+    <div class="input-group">
+        <input class="form-control" aria-label="Text input with multiple buttons">
+        <div class="input-group-btn">
+            <button type="submit" class="btn btn-primary">Пожаловаться</button>
         </div>
     </div>
 
+    {{for items}}
+    <div class="panel panel-warning">
+        <div class="panel-heading">
+            <h3 class="panel-title"><strong>{{:phones}}</strong> from <em>{{:url}}</em></h3>
+        </div>
+        <div class="panel-body">
+            {{:comment}}
+        </div>
+    </div>
+    {{/for}}
+
+    </div>
 </script>
 
-<div class="blacklistPanel" id="result"></div>
-
-<script>
-    var data = {
-        "message": 'Hello world',
-        "items": [{
-            "comment": "1",
-            "url": "\/obyavlenie\/bez-predoplaty-smartfon-bluboo-maya-god-garantii-IDnWPuA.html",
-            "phones": ["380504641717"]
-        }],
-        "success": true
-    };
-
-    $("#result").html($.templates("#panelView").render(data));
-</script>
+<script src="panel.js"></script>
 
 </body>
 </html>
