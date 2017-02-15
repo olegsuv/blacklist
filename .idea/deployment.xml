@@ -5,7 +5,7 @@
       <paths name="blacklist">
         <serverdata>
           <mappings>
-            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/extension/" local="$PROJECT_DIR$" web="/extension/" />
           </mappings>
         </serverdata>
       </paths>
