@@ -18,7 +18,7 @@
     "content_scripts": [
         {
             "matches": [
-                "https://www.olx.ua/*"
+                "https://www.olx.ua/obyavlenie/*"
             ],
             "js": [
                 "node_modules/jquery/dist/jquery.min.js",

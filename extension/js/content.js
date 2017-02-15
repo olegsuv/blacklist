@@ -10,7 +10,7 @@ function grabPhones() {
     var phones = [];
     for (var i = 0; i < phonesDom.length; i++) {
         var currentPhone = $(phonesDom).eq(i).text();
-        currentPhone = '38' + currentPhone.replace(/\s/ig, '');
+        currentPhone = '38' + currentPhone.replace(/\s/ig, '').replace(/-/ig, '');
         phones.push(currentPhone);
     }
     return phones;
