@@ -2,6 +2,24 @@
  * Created by Oleg on 14.02.2017.
  */
 
+function sendMessage(message, options, responseCallback) {
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, message, options || {}, responseCallback || null);
+    });
+}
+
+function setCurrentIcon() {
+    if (data.content.items.length) {
+        chrome.browserAction.setIcon({path: icons.error});
+    } else {
+        chrome.browserAction.setIcon({path: icons.checked});
+    }
+
+    if (!data || !data.phones) {
+        chrome.browserAction.setIcon({path: icons.warning});
+    }
+}
+
 function getTransferData(comment) {
     var dataObject = {
         phones: data.phones,
@@ -33,14 +51,10 @@ function setData(comment) {
 }
 
 function getData(dataObject) {
-    console.log('getData', dataObject);
-
     if (dataObject && dataObject.phones) {
         data.phones = dataObject.phones;
         data.url = dataObject.url;
     } else {
-        console.log('No data', dataObject);
-        chrome.browserAction.setIcon({path: icons.warning});
         return false;
     }
 
@@ -55,6 +69,7 @@ function getData(dataObject) {
         },
         error: function (json) {
             console.log('error', json);
+            setCurrentIcon();
         }
     });
 }
@@ -64,12 +79,11 @@ function processData(receivedData) {
     if (receivedData.items.length) {
         data.message = labels.found + receivedData.items.length;
         data.status = 'danger';
-        chrome.browserAction.setIcon({path: icons.error});
     } else {
         data.message = labels.notFound + data.phones.join(', ');
         data.status = 'success';
-        chrome.browserAction.setIcon({path: icons.checked});
     }
+    setCurrentIcon();
     renderData(data);
 }
 
@@ -136,6 +150,9 @@ window.addEventListener('DOMContentLoaded', function () {
         active: true,
         currentWindow: true
     }, function (tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, {}, getData);
+        chrome.tabs.sendMessage(tabs[0].id, {
+            from: 'popup',
+            resolve: 'phones'
+        }, getData);
     });
 });
