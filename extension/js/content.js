@@ -31,7 +31,7 @@ var selectors = {
 };
 
 // lets get phones
-$(selectors.phoneBlock).find(selectors.getPhone).click();
+// $(selectors.phoneBlock).find(selectors.getPhone).click();
 
 // Listen for messages from the popup
 chrome.runtime.onMessage.addListener(function (msg, sender, response) {
