@@ -1,25 +1,16 @@
 {
     "manifest_version": 2,
-    "name": "Rieltor Blacklist",
+    "name": "Ukraine Blacklist",
     "description": "This extension shows status of article author searched in our database",
-    "version": "3.1",
+    "version": "3.4",
     "icons": {
         "24": "images/ic_local_library_black_24dp_1x.png",
         "48": "images/ic_local_library_black_24dp_2x.png"
     },
-    "background": {
-        "scripts": [
-            "js/background.js"
-        ]
-    },
-    "browser_action": {
-        "default_icon": "images/ic_local_library_black_24dp_2x.png",
-        "default_popup": "popup.html"
+    "page_action": {
+        "default_icon": "images/ic_local_library_black_24dp_2x.png"
     },
     "permissions": [
-        "declarativeContent",
-        "tabs",
-        "activeTab",
         "https://blacklist.gooffline.org.ua/*",
         "https://www.olx.ua/*"
     ],

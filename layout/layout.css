@@ -19,3 +19,10 @@
 .input-group {
     margin-bottom: 15px;
 }
+
+.blacklistPanel .panel-title em {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: block;
+}

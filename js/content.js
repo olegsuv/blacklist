@@ -36,34 +36,14 @@ const selectors = {
     textOnePhone: 'strong',
     textPhones: 'strong span',
     layout: '/layout/layout.stache',
-    installPlace: '#offeractions'
+    installPlace: '#offeractions',
+    contactButton: '.contact-button'
 };
 
 var data = {
     labels: labels,
     url: location.pathname
 };
-
-function grabPhones() {
-    var phonesDom = $(selectors.phoneBlock).find(selectors.textPhones);
-    if (!phonesDom.length) {
-        phonesDom = $(selectors.phoneBlock).find(selectors.textOnePhone);
-    }
-    var phones = [];
-    for (var i = 0; i < phonesDom.length; i++) {
-        var currentPhone = $(phonesDom).eq(i).text();
-        currentPhone = '38' + currentPhone.replace(/\+380/ig, '0').replace(/\s/ig, '').replace(/-/ig, '');
-        phones.push(currentPhone);
-    }
-    return phones;
-}
-
-function sendData() {
-    return {
-        phones: grabPhones(),
-        url: location.pathname
-    }
-}
 
 function getTransferData(comment) {
     var dataObject = {
@@ -100,8 +80,7 @@ function setData(comment) {
         url: config.host + config.add,
         data: getTransferData(comment),
         dataType: 'json',
-        success: function (json) {
-            console.log('success', json);
+        success: function () {
             data.content.items.push(getTransferData(comment));
             $(selectors.addButton).prop('disabled', false).val('');
             renderData(data);
@@ -113,15 +92,21 @@ function setData(comment) {
 }
 
 function renderData(data) {
-    console.log('renderData', data);
     $(selectors.renderElement).html($.templates(selectors.templateId).render(data));
+
+    if (data.content.items.length) {
+        $(selectors.contactButton).css({
+            background: 'red',
+            opacity: '0.5',
+            cursor: 'not-allowed'
+        });
+    }
 }
 
 function parsePhones(phones) {
     data.phones = phones.match(/[0-9\s-]{10,}/ig).map(function (item) {
         return item.replace(/\s|-|\(|\)|/ig, '').replace('+38', '');
     });
-    getData();
 }
 
 function getPhone() {
@@ -135,6 +120,7 @@ function getPhone() {
         dataType: 'json',
         success: function (json) {
             parsePhones(json.value);
+            getData();
         },
         error: function (json) {
             console.log('error', json);
@@ -142,31 +128,27 @@ function getPhone() {
     });
 }
 
-function init () {
-    //temporary support for popup
-    $(selectors.phoneBlock).find(selectors.getPhone).click();
-    chrome.runtime.onMessage.addListener(function (msg, sender, response) {
-        response(sendData());
-    });
+function formSubmit(element) {
+    element.preventDefault();
 
+    var comment = $(selectors.addText).val();
+    if (comment) {
+        $(selectors.addButton).prop('disabled', true);
+        setData(comment);
+    }
+    else {
+        alert(labels.emptyComment);
+    }
+}
+
+function init() {
     //ajax phone
     getPhone();
 
     //install panel into body
     $.get(chrome.extension.getURL(selectors.layout), function (response) {
         $(selectors.installPlace).append($(response));
-        $(selectors.installPlace).on('submit', selectors.addForm, function (element) {
-            element.preventDefault();
-
-            var comment = $(selectors.addText).val();
-            if (comment) {
-                $(selectors.addButton).prop('disabled', true);
-                setData(comment);
-            }
-            else {
-                alert(labels.emptyComment);
-            }
-        });
+        $(selectors.installPlace).on('submit', selectors.addForm, formSubmit);
     });
 }
 
