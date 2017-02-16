@@ -9,7 +9,7 @@
         </div>
         {{else}}
         <div class="alert alert-info" role="alert">
-            {{:labels.notFound}} + <strong>{{for phones}} {{:#data}} {{/for}}</strong>
+            {{:labels.notFound}} <strong>{{for phones}} {{:#data}} {{/for}}</strong>
         </div>
         {{/if}}
 
