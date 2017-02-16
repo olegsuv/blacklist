@@ -3,13 +3,13 @@
 <script id="panelView" type="text/x-jsrender">
     <div class="container">
 
-        {{if content.items}}
+        {{if content.items.length}}
         <div class="alert alert-danger" role="alert">
             {{:labels.found}} {{:content.items.length}}
         </div>
         {{else}}
         <div class="alert alert-info" role="alert">
-            {{:labels.notFound}}
+            {{:labels.notFound}} + <strong>{{for phones}} {{:#data}} {{/for}}</strong>
         </div>
         {{/if}}
 
@@ -33,9 +33,9 @@
         </div>
         {{/for}}
 
-        <form class="js-claim-form input-group">
-            <input class="form-control js-claim-text" placeholder="{{:labels.placeholder}}">
-            <button type="submit" class="btn btn-primary js-claim-button">{{:labels.clickToAction}}</button>
+        <form class="js-claim-form">
+            <input placeholder="{{:labels.placeholder}}" class="form-control css-claim-text js-claim-text">
+            <button type="submit" class="form-control btn btn-primary js-claim-button">{{:labels.clickToAction}}</button>
         </form>
 
     </div>
