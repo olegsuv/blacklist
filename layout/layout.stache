@@ -1,13 +1,15 @@
-<div class="blacklistPanel fixed" id="result"></div>
+<div class="blacklistPanel" id="result"></div>
 
 <script id="panelView" type="text/x-jsrender">
     <div class="container">
 
-    {{if phones && phones.length }}
-
-        {{if message}}
-        <div class="alert alert-{{:status}}" role="alert">
-            {{:message}}
+        {{if content.items}}
+        <div class="alert alert-danger" role="alert">
+            {{:labels.found}} {{:content.items.length}}
+        </div>
+        {{else}}
+        <div class="alert alert-info" role="alert">
+            {{:labels.notFound}}
         </div>
         {{/if}}
 
@@ -22,20 +24,10 @@
         </div>
         {{/for}}
 
-        <div class="input-group">
+        <form class="js-claim-form input-group">
             <input class="form-control js-claim-text" placeholder="{{:labels.placeholder}}">
-            <div class="input-group-btn">
-                <button type="submit" class="btn btn-primary js-claim-button">{{:labels.clickToAction}}</button>
-            </div>
-        </div>
-
-    {{else}}
-
-        <div class="alert alert-danger" role="alert">
-            {{:labels.noPhones}}
-        </div>
-
-    {{/if}}
+            <button type="submit" class="btn btn-primary js-claim-button">{{:labels.clickToAction}}</button>
+        </form>
 
     </div>
 </script>

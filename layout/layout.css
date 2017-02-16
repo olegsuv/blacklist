@@ -19,9 +19,3 @@
 .input-group {
     margin-bottom: 15px;
 }
-
-#result {
-    min-height: 60px;
-    max-height: 300px;
-    overflow-y: auto;
-}

@@ -2,23 +2,40 @@
  * Created by Oleg on 14.02.2017.
  */
 
-function sendMessage(message, options, responseCallback) {
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, message, options || {}, responseCallback || null);
-    });
-}
+const labels = {
+    notFound: 'Жалоб еще не было, можно звонить: ',
+    found: 'Найдены жалобы: ',
+    adding: 'Добавляется...',
+    added: 'Телефон добавлен в базу, спасибо',
+    error: 'Ошибка скрипта',
+    enterComment: 'Введите комментарий',
+    emptyComment: 'Вы не ввели комментарий, добавления в базу не будет',
+    pending: 'Загрузка данных...',
+    placeholder: 'Введите текст жалобы',
+    clickToAction: 'Пожаловаться',
+    noPhones: 'Телефонные номера не загружены'
+};
 
-function setCurrentIcon() {
-    if (data.content.items.length) {
-        chrome.browserAction.setIcon({path: icons.error});
-    } else {
-        chrome.browserAction.setIcon({path: icons.checked});
-    }
+const config = {
+    host: 'https://blacklist.gooffline.org.ua',
+    add: '/api/v1/platform/add.json',
+    phones: '/api/v1/platform/phones.json',
+    search: '/api/v1/platform/search.json',
+    siteEvent: 'adPageShowContact'
+};
 
-    if (!data || !data.phones) {
-        chrome.browserAction.setIcon({path: icons.warning});
-    }
-}
+const selectors = {
+    addButton: '.js-claim-button',
+    addText: '.js-claim-text',
+    renderElement: '#result',
+    templateId: '#panelView'
+};
+
+var data = {
+    labels: labels,
+    message: labels.pending,
+    status: 'info'
+};
 
 function getTransferData(comment) {
     var dataObject = {
@@ -69,7 +86,6 @@ function getData(dataObject) {
         },
         error: function (json) {
             console.log('error', json);
-            setCurrentIcon();
         }
     });
 }
@@ -83,54 +99,12 @@ function processData(receivedData) {
         data.message = labels.notFound + data.phones.join(', ');
         data.status = 'success';
     }
-    setCurrentIcon();
     renderData(data);
 }
 
 function renderData(data) {
     $(selectors.renderElement).html($.templates(selectors.templateId).render(data));
 }
-
-const icons = {
-    error: 'images/ic_error_black_24dp_1x.png',
-    checked: 'images/ic_check_black_24dp_1x.png',
-    warning: 'images/ic_warning_black_24dp_1x.png'
-};
-
-const labels = {
-    notFound: 'Жалоб еще не было, можно звонить: ',
-    found: 'Найдены жалобы: ',
-    adding: 'Добавляется...',
-    added: 'Телефон добавлен в базу, спасибо',
-    error: 'Ошибка скрипта',
-    enterComment: 'Введите комментарий',
-    emptyComment: 'Вы не ввели комментарий, добавления в базу не будет',
-    pending: 'Загрузка данных...',
-    placeholder: 'Введите текст жалобы',
-    clickToAction: 'Пожаловаться',
-    noPhones: 'Телефонные номера не загружены'
-};
-
-const config = {
-    host: 'https://blacklist.gooffline.org.ua',
-    add: '/api/v1/estate/advertisement/add.json',
-    phones: '/api/v1/estate/advertisement/phones.json',
-    search: '/api/v1/estate/advertisement/search.json',
-    siteEvent: 'adPageShowContact'
-};
-
-const selectors = {
-    addButton: '.js-claim-button',
-    addText: '.js-claim-text',
-    renderElement: '#result',
-    templateId: '#panelView'
-};
-
-var data = {
-    labels: labels,
-    message: labels.pending,
-    status: 'info'
-};
 
 $(document.body).on('click', selectors.addButton, function () {
     var comment = $(selectors.addText).val();
