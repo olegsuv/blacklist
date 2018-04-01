@@ -17,7 +17,7 @@ const labels = {
 };
 
 const config = {
-    host: 'https://blacklist.gooffline.org.ua',
+    host: 'https://pacific-oasis-63187.herokuapp.com',
     add: '/api/v1/platform/add.json',
     phones: '/api/v1/platform/phones.json',
     search: '/api/v1/platform/search.json',
