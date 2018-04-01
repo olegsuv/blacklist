@@ -6,12 +6,15 @@
 var rule1 = {
     conditions: [
         new chrome.declarativeContent.PageStateMatcher({
-            pageUrl: { hostEquals: 'www.olx.ua', schemes: ['https'] }
+            pageUrl: {
+                hostEquals: 'www.olx.ua',
+                schemes: ['https']
+            }
         })
     ],
-    actions: [ new chrome.declarativeContent.ShowPageAction() ]
+    actions: [new chrome.declarativeContent.ShowPageAction()]
 };
-chrome.runtime.onInstalled.addListener(function (details) {
+chrome.runtime.onInstalled.addListener(function () {
     chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
         chrome.declarativeContent.onPageChanged.addRules([rule1]);
     });

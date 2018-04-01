@@ -1,19 +1,17 @@
 <div class="blacklistPanel" id="result"></div>
 
 <script id="panelView" type="text/x-jsrender">
-    <div class="container">
-
-        {{if content.items.length}}
+    {{if content.items.length}}
         <div class="alert alert-danger" role="alert">
             {{:labels.found}} {{:content.items.length}}
         </div>
-        {{else}}
-        <div class="alert alert-info" role="alert">
-            {{:labels.notFound}} <strong>{{for phones}} {{:#data}} {{/for}}</strong>
+    {{else}}
+        <div class="alert alert-success" role="alert">
+            {{:labels.notFound}}
         </div>
-        {{/if}}
+    {{/if}}
 
-        {{for content.items}}
+    {{for content.items}}
         <div class="panel panel-warning">
             <div class="panel-heading">
                 <h3 class="panel-title">
@@ -22,8 +20,8 @@
                             {{:#data}}
                         {{/for}}
                     </strong>
-                    <em>
-                        [{{:url}}]
+                    <em class="small">
+                        {{:url}}
                     </em>
                 </h3>
             </div>
@@ -31,12 +29,15 @@
                 {{:comment}}
             </div>
         </div>
-        {{/for}}
+    {{/for}}
 
-        <form class="js-claim-form">
-            <input placeholder="{{:labels.placeholder}}" class="form-control css-claim-text js-claim-text">
-            <button type="submit" class="form-control btn btn-primary js-claim-button">{{:labels.clickToAction}}</button>
-        </form>
+    <form class="js-claim-form">
+        <h1>{{:labels.toAddHeader}}</h1>
+        <br>
+        <input placeholder="{{:labels.placeholder}}" class="form-control css-claim-text js-claim-text">
+        <br>
+        <button type="submit" class="form-control btn btn-primary js-claim-button">{{:labels.clickToAction}}</button>
+    </form>
 
-    </div>
+    <hr />
 </script>

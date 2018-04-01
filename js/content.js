@@ -3,8 +3,9 @@
  */
 
 const labels = {
-    notFound: 'Жалоб еще не было, можно звонить: ',
+    notFound: 'Жалоб еще не было, можно звонить',
     found: 'Найдены жалобы: ',
+    toAddHeader: 'Добавить жалобу:',
     adding: 'Добавляется...',
     added: 'Телефон добавлен в базу, спасибо',
     error: 'Ошибка скрипта',
@@ -18,11 +19,9 @@ const labels = {
 
 const config = {
     host: 'https://pacific-oasis-63187.herokuapp.com',
-    add: '/api/v1/platform/add.json',
-    phones: '/api/v1/platform/phones.json',
-    search: '/api/v1/platform/search.json',
-    getPhone: 'https://www.olx.ua/ajax/misc/contact/phone/',
-    siteEvent: 'adPageShowContact'
+    add: '/api/v1/estate/advertisement/add.json',
+    phones: '/api/v1/estate/advertisement/phones.json',
+    search: '/api/v1/estate/advertisement/search.json'
 };
 
 const selectors = {
@@ -31,24 +30,25 @@ const selectors = {
     addForm: '.js-claim-form',
     renderElement: '#result',
     templateId: '#panelView',
-    phoneBlock: '.contact-button.link-phone',
-    getPhone: '.spoiler',
-    textOnePhone: 'strong',
-    textPhones: 'strong span',
     layout: '/layout/layout.stache',
-    installPlace: '#offeractions',
-    contactButton: '.contact-button'
+    installPlace: '#contact_methods',
+    phoneBlock: '.contact-button.link-phone',
+    extensionInject: '.extension-inject'
 };
 
 var data = {
+    phones: [],
+    content: {
+        items: []
+    },
     labels: labels,
-    url: location.pathname
+    location: location
 };
 
 function getTransferData(comment) {
     var dataObject = {
         phones: data.phones,
-        url: data.url
+        url: location.pathname
     };
     if (comment) {
         dataObject.comment = comment;
@@ -92,10 +92,15 @@ function setData(comment) {
 }
 
 function renderData(data) {
-    $(selectors.renderElement).html($.templates(selectors.templateId).render(data));
+    console.log('$.templates', $.templates);
+    console.log('$.templates(selectors.templateId)', $.templates(selectors.templateId));
+    console.log('data', data);
+    var renderedTemplate = $.templates(selectors.templateId).render(data);
+    $(selectors.extensionInject).html(renderedTemplate);
+    console.log('renderedTemplate', renderedTemplate);
 
     if (data.content.items.length) {
-        $(selectors.contactButton).css({
+        $(selectors.phoneBlock).css({
             background: 'red',
             opacity: '0.5',
             cursor: 'not-allowed'
@@ -103,29 +108,15 @@ function renderData(data) {
     }
 }
 
-function parsePhones(phones) {
-    data.phones = phones.match(/[0-9\s-]{10,}/ig).map(function (item) {
-        return item.replace(/\s|-|\(|\)|/ig, '').replace('+38', '');
-    });
-}
+function parsePhones() {
+    var $phones = $(selectors.phoneBlock).find('.block');
+    if ($phones.length) {
+        $phones.each(function (i, phone) {
+            data.phones.push($(phone).text().replace('+38', ''));
+        });
 
-function getPhone() {
-    var id = location.href.split('-ID')[1].split('.html')[0];
-    var url = config.getPhone + '/' + id + '/white/';
-
-    $.ajax({
-        crossOrigin: true,
-        type: 'get',
-        url: url,
-        dataType: 'json',
-        success: function (json) {
-            parsePhones(json.value);
-            getData();
-        },
-        error: function (json) {
-            console.log('error', json);
-        }
-    });
+        getData();
+    }
 }
 
 function formSubmit(element) {
@@ -142,13 +133,13 @@ function formSubmit(element) {
 }
 
 function init() {
-    //ajax phone
-    getPhone();
+    $(selectors.phoneBlock).bind('DOMSubtreeModified', parsePhones).click();
+    $(selectors.installPlace).after($('<div/>').addClass(selectors.extensionInject.replace('.', '')));
 
-    //install panel into body
+    //install panel into body!
     $.get(chrome.extension.getURL(selectors.layout), function (response) {
         $(selectors.installPlace).append($(response));
-        $(selectors.installPlace).on('submit', selectors.addForm, formSubmit);
+        $(selectors.extensionInject).on('submit', selectors.addForm, formSubmit);
     });
 }
 
