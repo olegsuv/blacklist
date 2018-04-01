@@ -30,3 +30,32 @@
 .blacklistPanel .css-claim-text {
     margin-bottom: 20px;
 }
+
+.carousel-control.left,
+.carousel-control.right {
+    background: none;
+}
+
+.glyphicon-chevron-left::before {
+    color: #a94442;
+    content: "<";
+}
+
+.glyphicon-chevron-right::before {
+    color: #a94442;
+    content: ">";
+}
+
+.carousel-indicators {
+    bottom: 5px;
+}
+
+.carousel-indicators li {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+
+.panel {
+    margin-bottom: 30px;
+}
