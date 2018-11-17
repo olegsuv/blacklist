@@ -30,7 +30,7 @@ const selectors = {
     addForm: '.js-claim-form',
     renderElement: '#result',
     templateId: '#panelView',
-    layout: '/layout/layout.stache',
+    blacklist: '/blacklist/layout.stache',
     installPlace: '#contact_methods',
     phoneBlock: '.contact-button.link-phone',
     extensionInject: '.extension-inject'
@@ -132,7 +132,7 @@ function init() {
     $(selectors.installPlace).after($('<div/>').addClass(selectors.extensionInject.replace('.', '')));
 
     //install panel into body!
-    $.get(chrome.extension.getURL(selectors.layout), function (response) {
+    $.get(chrome.extension.getURL(selectors.blacklist), function (response) {
         $(selectors.installPlace).append($(response));
         $(selectors.extensionInject).on('submit', selectors.addForm, formSubmit);
     });

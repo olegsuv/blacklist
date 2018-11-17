@@ -22,11 +22,11 @@
                 "node_modules/jquery/dist/jquery.min.js",
                 "node_modules/jsrender/jsrender.min.js",
                 "node_modules/bootstrap/dist/js/bootstrap.min.js",
-                "js/content.js"
+                "js/blacklist.js"
             ],
             "css": [
                 "node_modules/bootstrap/dist/css/bootstrap.min.css",
-                "layout/layout.css"
+                "blacklist/layout.css"
             ]
         }
     ],
@@ -34,7 +34,7 @@
         "js/*",
         "node_modules/*",
         "images/*",
-        "layout/*"
+        "blacklist/*"
     ],
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }

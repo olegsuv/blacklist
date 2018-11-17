@@ -1,4 +1,6 @@
-<div class="blacklistPanel" id="result"></div>
+<div class="blacklistPanel" id="result">
+    Test
+</div>
 
 <script id="panelView" type="text/x-jsrender">
     {{if content.items.length}}
