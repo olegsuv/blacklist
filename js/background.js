@@ -3,7 +3,7 @@
  */
 
 /* global chrome */
-var rule1 = {
+const rule1 = {
     conditions: [
         new chrome.declarativeContent.PageStateMatcher({
             pageUrl: {

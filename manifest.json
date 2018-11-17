@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "Ukraine Blacklist",
     "description": "This extension shows status of article author searched in our database",
-    "version": "4.2",
+    "version": "5.0",
     "icons": {
         "24": "images/ic_local_library_black_24dp_1x.png",
         "48": "images/ic_local_library_black_24dp_2x.png"
@@ -16,17 +16,18 @@
     "content_scripts": [
         {
             "matches": [
-                "https://www.olx.ua/obyavlenie/*"
+                "https://www.olx.ua/obyavlenie/*",
+                "https://www.olx.ua/nedvizhimost/zemlya/prodazha-zemli/*"
             ],
             "js": [
                 "node_modules/jquery/dist/jquery.min.js",
                 "node_modules/jsrender/jsrender.min.js",
                 "node_modules/bootstrap/dist/js/bootstrap.min.js",
-                "js/blacklist.js"
+                "js/zemlya.js"
             ],
             "css": [
                 "node_modules/bootstrap/dist/css/bootstrap.min.css",
-                "blacklist/layout.css"
+                "zemlya/zemlya.css"
             ]
         }
     ],
@@ -34,7 +35,7 @@
         "js/*",
         "node_modules/*",
         "images/*",
-        "blacklist/*"
+        "zemlya/*"
     ],
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }
