@@ -92,13 +92,8 @@ function setData(comment) {
 }
 
 function renderData(data) {
-    console.log('$.templates', $.templates);
-    console.log('$.templates(selectors.templateId)', $.templates(selectors.templateId));
-    console.log('data', data);
     var renderedTemplate = $.templates(selectors.templateId).render(data);
     $(selectors.extensionInject).html(renderedTemplate);
-    console.log('renderedTemplate', renderedTemplate);
-
     if (data.content.items.length) {
         $(selectors.phoneBlock).css({
             background: 'red',
