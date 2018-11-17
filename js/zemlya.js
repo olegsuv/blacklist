@@ -48,10 +48,10 @@ function processPrice(i, size) {
     const currentCurrency = $('.currencySelector .selected').text();
     const priceSelector = '.offer .price';
     const currentPrice = parseInt($(priceSelector).eq(i).find('strong').text().match(/\d/ig).join(''));
-    const currentPricePerSize = parseInt(currentPrice / size, 10);
-    const currentPriceForAll = parseInt(currentPrice * size, 10);
-    $(priceSelector).eq(i).append($(`<div class="zemlya zemlya-price-per-size">${currentPricePerSize} ${currentCurrency} за сотку</div>`));
-    $(priceSelector).eq(i).append($(`<div class="zemlya zemlya-price-for-all">${currentPriceForAll} ${currentCurrency} за все</div>`));
+    const currentPricePerSize = parseInt(currentPrice / size).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    const currentPriceForAll = parseInt(currentPrice * size).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    $(priceSelector).eq(i).append($(`<div class="zemlya zemlya-price-per-size"><span>за сотку</span> ${currentPricePerSize} ${currentCurrency}</div>`));
+    $(priceSelector).eq(i).append($(`<div class="zemlya zemlya-price-for-all"><span>за все</span> ${currentPriceForAll} ${currentCurrency}</div>`));
 }
 
 function failedGet(response) {
