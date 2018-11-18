@@ -31,7 +31,7 @@ class ListUpdater {
     }
 
     getNode(text, className) {
-        return $(`<div class="list-updater-label list-updater-label-${className}">${text}</div>`);
+        return text ? $(`<div class="list-updater-label list-updater-label-${className}">${text}</div>`) : null;
     }
 
     processLink(i, size, description) {
@@ -50,7 +50,7 @@ class ListUpdater {
         const forEachNode = this.getNode(forEachText, 'price-per-size');
         const forAllText = this.getForAllText(size, currentPrice, currentCurrency);
         const forAllNode = this.getNode(forAllText, 'price-for-all');
-        $(priceSelector).eq(i).append(forEachNode);
-        $(priceSelector).eq(i).append(forAllNode);
+        forEachNode && $(priceSelector).eq(i).append(forEachNode);
+        forAllNode && $(priceSelector).eq(i).append(forAllNode);
     }
 }

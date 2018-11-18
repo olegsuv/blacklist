@@ -24,8 +24,7 @@ class Flat extends ListUpdater {
     }
 
     getForAllText(size, currentPrice, currentCurrency) {
-        const currentPriceForAll = parseInt(currentPrice * size).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-        return `<span>за все</span> ${currentPriceForAll} ${currentCurrency}`;
+        return null;
     }
 }
 
