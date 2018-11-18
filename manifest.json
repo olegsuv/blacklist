@@ -1,8 +1,8 @@
 {
     "manifest_version": 2,
-    "name": "Ukraine Blacklist",
-    "description": "This extension shows status of article author searched in our database",
-    "version": "5.0",
+    "name": "Olx Улучшения",
+    "description": "Выводит дополнительные сведения из объявлений на страницу поиска.",
+    "version": "5.3",
     "icons": {
         "24": "images/ic_local_library_black_24dp_1x.png",
         "48": "images/ic_local_library_black_24dp_2x.png"
@@ -17,24 +17,26 @@
         {
             "matches": [
                 "https://www.olx.ua/obyavlenie/*",
-                "https://www.olx.ua/nedvizhimost/zemlya/prodazha-zemli/*"
+                "https://www.olx.ua/nedvizhimost/zemlya/*",
+                "https://www.olx.ua/nedvizhimost/kvartiry-komnaty/*"
             ],
             "js": [
                 "node_modules/jquery/dist/jquery.min.js",
                 "node_modules/jsrender/jsrender.min.js",
-                "node_modules/bootstrap/dist/js/bootstrap.min.js",
-                "js/zemlya.js"
+                "js/base.js",
+                "js/land.js",
+                "js/flat.js"
             ],
             "css": [
-                "zemlya/zemlya.css"
+                "css/list-updater.css"
             ]
         }
     ],
     "web_accessible_resources": [
-        "js/*",
-        "node_modules/*",
+        "css/*",
         "images/*",
-        "zemlya/*"
+        "js/*",
+        "node_modules/*"
     ],
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }
