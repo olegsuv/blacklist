@@ -7,26 +7,30 @@ class ListUpdater {
     getForEachText () {}
     getForAllText () {}
 
+    constructor() {
+        this.ajaxLoads = 0;
+        this.localStorageLoads = 0;
+    }
+
     init() {
         const linkSelector = '.listHandler .link.detailsLink';
         for (let i = 0; i < $(linkSelector).length; i++) {
             let url = $(linkSelector).eq(i).attr('href').split('#')[0];
             if (localStorage.getItem(url)) {
+                this.localStorageLoads++;
                 this.readLocalStorage(i, url);
             } else {
+                this.ajaxLoads++;
                 $.get(url, (response) => this.ajaxGetSuccess(response, i, url)).fail(this.ajaxGetFail);
             }
         }
-        window.addEventListener('ajaxReady', (event) => {
-            console.log('ajaxReady', event);
-        });
-        window.addEventListener('readystatechange', (event) => {
-            console.log('readystatechange', event);
+        console.log(`localStorageLoads: ${this.localStorageLoads}, ajaxLoads: ${this.ajaxLoads}`);
+        $(window).bind('ajaxReady', function() {
+            alert('ajaxReady2');
         });
     }
 
     ajaxGetSuccess(response, i, url) {
-        console.log('ajaxGetSuccess', i, url);
         const size = this.getSize(response);
         const description = this.getDescription(response);
         localStorage.setItem(url, JSON.stringify({
@@ -37,7 +41,6 @@ class ListUpdater {
     }
 
     readLocalStorage(i, url) {
-        console.log('ajaxGetSuccess', i, url);
         const {size, description} = JSON.parse(localStorage.getItem(url));
         this.modifyDOM(i, size, description);
     }
