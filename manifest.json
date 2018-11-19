@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "Olx Улучшения",
     "description": "Выводит дополнительные сведения из объявлений на страницу поиска.",
-    "version": "5.3",
+    "version": "5.4",
     "icons": {
         "24": "images/ic_local_library_black_24dp_1x.png",
         "48": "images/ic_local_library_black_24dp_2x.png"
