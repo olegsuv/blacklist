@@ -3,9 +3,9 @@
  */
 class ListUpdater {
     getSize() {}
-    getTextForLink () {}
-    getForEachText () {}
-    getForAllText () {}
+    getTextForLink() {}
+    getForEachText() {}
+    getForAllText() {}
 
     constructor() {
         this.ajaxLoads = 0;
@@ -14,9 +14,10 @@ class ListUpdater {
     }
 
     init() {
-        this.VDOM = $('#listContainer');
         const linkSelector = '.listHandler .link.detailsLink';
-        for (let i = 0; i < $(linkSelector).length; i++) {
+        this.VDOM = $('#listContainer').clone();
+        this.linkCounter = $(linkSelector).length;
+        for (let i = 0; i < this.linkCounter; i++) {
             let url = $(linkSelector).eq(i).attr('href').split('#')[0];
             if (localStorage.getItem(url)) {
                 this.localStorageLoads++;
@@ -25,11 +26,7 @@ class ListUpdater {
                 this.ajaxLoads++;
                 $.get(url, (response) => this.ajaxGetSuccess(response, i, url)).fail(this.ajaxGetFail);
             }
-            this.linkCounter = i;
         }
-        $(window).bind('ajaxReady', function() {
-            alert('ajaxReady2');
-        });
     }
 
     checkLoads() {
@@ -42,7 +39,7 @@ class ListUpdater {
 
     ajaxGetSuccess(response, i, url) {
         const size = this.getSize(response);
-        const description = this.getDescription(response);
+        const description = $(response).find('#textContent').text().trim();
         localStorage.setItem(url, JSON.stringify({
             size,
             description
@@ -65,12 +62,13 @@ class ListUpdater {
         console.log('fail', response);
     }
 
-    getDescription(response) {
-        return $(response).find('#textContent').text().trim();
+    getNode(text, className) {
+        return text ? $(`<br /><span class="list-updater-label list-updater-label-${className}">${text}</span>`) : null;
     }
 
-    getNode(text, className) {
-        return text ? $(`<div class="list-updater-label list-updater-label-${className}">${text}</div>`) : null;
+    getCurrentPrice(i, priceSelector) {
+        const priceArray = this.VDOM.find(priceSelector).eq(i).find('strong').text().match(/\d/ig);
+        return priceArray && parseInt(priceArray.join(''), 10);
     }
 
     processLink(i, size, description) {
@@ -84,12 +82,14 @@ class ListUpdater {
     processPrice(i, size) {
         const currentCurrency = this.VDOM.find('.currencySelector .selected').text();
         const priceSelector = '.offer .price';
-        const currentPrice = parseInt(this.VDOM.find(priceSelector).eq(i).find('strong').text().match(/\d/ig).join(''));
-        const forEachText = this.getForEachText(size, currentPrice, currentCurrency);
-        const forEachNode = this.getNode(forEachText, 'price-per-size');
-        const forAllText = this.getForAllText(size, currentPrice, currentCurrency);
-        const forAllNode = this.getNode(forAllText, 'price-for-all');
-        forEachNode && this.VDOM.find(priceSelector).eq(i).append(forEachNode);
-        forAllNode && this.VDOM.find(priceSelector).eq(i).append(forAllNode);
+        const currentPrice = this.getCurrentPrice(i, priceSelector);
+        if (currentPrice) {
+            const forEachText = this.getForEachText(size, currentPrice, currentCurrency);
+            const forEachNode = this.getNode(forEachText, 'price-per-size');
+            const forAllText = this.getForAllText(size, currentPrice, currentCurrency);
+            const forAllNode = this.getNode(forAllText, 'price-for-all');
+            forEachNode && this.VDOM.find(priceSelector).eq(i).append(forEachNode);
+            forAllNode && this.VDOM.find(priceSelector).eq(i).append(forAllNode);
+        }
     }
 }

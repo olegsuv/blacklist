@@ -38,4 +38,3 @@ if (location.href.indexOf(flatMask) !== -1) {
     const flat = new Flat();
     flat.init();
 }
-
