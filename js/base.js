@@ -10,9 +10,11 @@ class ListUpdater {
     constructor() {
         this.ajaxLoads = 0;
         this.localStorageLoads = 0;
+        this.modified = 0;
     }
 
     init() {
+        this.VDOM = $('#listContainer');
         const linkSelector = '.listHandler .link.detailsLink';
         for (let i = 0; i < $(linkSelector).length; i++) {
             let url = $(linkSelector).eq(i).attr('href').split('#')[0];
@@ -23,11 +25,19 @@ class ListUpdater {
                 this.ajaxLoads++;
                 $.get(url, (response) => this.ajaxGetSuccess(response, i, url)).fail(this.ajaxGetFail);
             }
+            this.linkCounter = i;
         }
-        console.log(`localStorageLoads: ${this.localStorageLoads}, ajaxLoads: ${this.ajaxLoads}`);
         $(window).bind('ajaxReady', function() {
             alert('ajaxReady2');
         });
+    }
+
+    checkLoads() {
+        this.modified++;
+        if (this.linkCounter === this.modified) {
+            $('#listContainer').html(this.VDOM);
+            console.log(`localStorageLoads: ${this.localStorageLoads}, ajaxLoads: ${this.ajaxLoads}`);
+        }
     }
 
     ajaxGetSuccess(response, i, url) {
@@ -48,6 +58,7 @@ class ListUpdater {
     modifyDOM(i, size, description) {
         this.processLink(i, size, description);
         this.processPrice(i, size);
+        this.checkLoads();
     }
 
     static ajaxGetFail(response) {
@@ -66,19 +77,19 @@ class ListUpdater {
         const linkSelector = '.listHandler .link.detailsLink';
         const text = this.getTextForLink(size);
         const node = this.getNode(text, 'size');
-        $(linkSelector).eq(i).append(node);
-        $(linkSelector).eq(i).attr('title', description);
+        this.VDOM.find(linkSelector).eq(i).append(node);
+        this.VDOM.find(linkSelector).eq(i).attr('title', description);
     }
 
     processPrice(i, size) {
-        const currentCurrency = $('.currencySelector .selected').text();
+        const currentCurrency = this.VDOM.find('.currencySelector .selected').text();
         const priceSelector = '.offer .price';
-        const currentPrice = parseInt($(priceSelector).eq(i).find('strong').text().match(/\d/ig).join(''));
+        const currentPrice = parseInt(this.VDOM.find(priceSelector).eq(i).find('strong').text().match(/\d/ig).join(''));
         const forEachText = this.getForEachText(size, currentPrice, currentCurrency);
         const forEachNode = this.getNode(forEachText, 'price-per-size');
         const forAllText = this.getForAllText(size, currentPrice, currentCurrency);
         const forAllNode = this.getNode(forAllText, 'price-for-all');
-        forEachNode && $(priceSelector).eq(i).append(forEachNode);
-        forAllNode && $(priceSelector).eq(i).append(forAllNode);
+        forEachNode && this.VDOM.find(priceSelector).eq(i).append(forEachNode);
+        forAllNode && this.VDOM.find(priceSelector).eq(i).append(forAllNode);
     }
 }
