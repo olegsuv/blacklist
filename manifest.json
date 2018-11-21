@@ -2,7 +2,11 @@
     "manifest_version": 2,
     "name": "Olx Улучшения",
     "description": "Выводит дополнительные сведения из объявлений на страницу поиска.",
-    "version": "5.4",
+    "version": "5.5",
+    "background": {
+        "scripts": ["js/background.js"],
+        "persistent": false
+    },
     "icons": {
         "24": "images/ic_local_library_black_24dp_1x.png",
         "48": "images/ic_local_library_black_24dp_2x.png"
@@ -11,6 +15,7 @@
         "default_icon": "images/ic_local_library_black_24dp_2x.png"
     },
     "permissions": [
+        "tabs",
         "https://www.olx.ua/*"
     ],
     "content_scripts": [
