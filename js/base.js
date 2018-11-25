@@ -30,7 +30,8 @@ class ListUpdater {
         this.offers = $('.listHandler .offer:not(".listUpdated")');
         this.offers.addClass('listUpdated');
         this.offers.each((index, element) => {
-            let url = $(element).find('.link.detailsLink').attr('href').split('#')[0];
+            let href = $(element).find('.link.detailsLink').attr('href');
+            let url = href && href.split('#')[0];
             if (localStorage.getItem(url)) {
                 this.localStorageLoads++;
                 this.readLocalStorage(element, url);
