@@ -43,8 +43,7 @@ class ListUpdater {
     }
 
     listenBackground() {
-        chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-            console.log('listenBackground', arguments);
+        chrome.runtime.onMessage.addListener((msg) => {
             if (msg === 'url-update' && !this.isWorking) {
                 this.startLoads();
             }
